@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import { Routes, Route, Outlet } from "react-router-dom";
+import { Container } from "semantic-ui-react";
+// import Home from "./routes/home.component";
+import Login from "./routes/login.component";
+import Header from "./components/header.component";
+import MyMenuAndContent from "./components/my-menu-and-content.component";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <Container style={{ marginTop: "20px" }}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Header />
+                <Outlet />
+                
+              </>
+            }
+          >
+            <Route index element={<MyMenuAndContent />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
+        </Routes>
+      </Container>
+    );
+  }
 }
 
 export default App;
