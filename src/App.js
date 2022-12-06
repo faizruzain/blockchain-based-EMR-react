@@ -9,11 +9,17 @@ import PatientDetails from "./routes/patient-details.component";
 class App extends Component {
   render() {
     return (
-      <Container style={{ marginTop: "20px" }}>
+      <Container
+        fluid
+        style={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
+      >
         <Routes>
-          <Route path="/" element={<Header/>}>
+          <Route path="/" element={<Header />}>
             <Route path="/doctor" element={<MyMenu />} />
-            <Route path="/doctor/patient-details/:address" element={<PatientDetails />} />
+            <Route
+              path="/doctor/patient-details/:address"
+              element={<PatientDetails />}
+            />
             <Route path="/login" element={<Login />} />
           </Route>
         </Routes>

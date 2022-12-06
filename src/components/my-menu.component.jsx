@@ -21,9 +21,9 @@ class MyMenu extends Component {
 
     return (
       <Grid>
-        <Grid.Column width={4}>
-          <Menu size="massive" color="black" fluid vertical>
-            <Menu.Item>
+        <Grid.Column width={3}>
+          <Menu size="large" compact vertical style={{marginBottom: "370px"}}>
+            <Menu.Item >
               <Image
                 src={doctorImage}
                 size="medium"
@@ -49,6 +49,14 @@ class MyMenu extends Component {
             </Menu.Item>
 
             <Menu.Item
+              name="newPatient"
+              active={activeItem === "newPatient"}
+              onClick={this.handleItemClick}
+            >
+              New Patient
+            </Menu.Item>
+
+            <Menu.Item
               name="logout"
               active={activeItem === "logout"}
               onClick={this.handleItemClick}
@@ -58,7 +66,7 @@ class MyMenu extends Component {
           </Menu>
         </Grid.Column>
 
-        <Grid.Column stretched width={12}>
+        <Grid.Column floated="right" stretched width={13}>
           <Segment>
             <Content content={this.state.activeItem} />
           </Segment>

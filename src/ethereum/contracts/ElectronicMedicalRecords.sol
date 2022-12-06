@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.17;
+pragma experimental ABIEncoderV2;
 
 contract ContractDeployer {
     struct ContractAddress {
@@ -34,10 +35,69 @@ contract ContractDeployer {
 }
 
 contract Patient {
+    struct IdentitasPasien {
+        address patientAddress;
+        string nama_lengkap;
+        uint umur;
+        string tanggal_lahir;
+    }
+
+    struct RawatJalan {
+        address patient_address;
+        string jenis; // rawat jalan
+        string date_and_time;
+        string anamnesis; // mencakup keluhan dan riwat penyakit
+        string diagnosis;
+        string rp; // rencana penatalaksanaan
+        string pengobatan;
+        string tindakan;
+        string pelayanan; // pelayanan lain yang telah diberikan kepada pasien
+        bool agreement; // persetujuan tindakan bila diperlukan
+    }
+
+    struct RawatInap {
+        IdentitasPasien patient_id; // indentitas pasien
+        string jenis; // rawat inap
+        string date_and_time;
+        string anamnesis; // mencakup keluhan dan riwat penyakit
+        string fisik; // hasil pemeriksaan fisik dan penunjang medik
+        string diagnosis;
+        string rp; // rencana penatalaksanaan
+        string pengobatan;
+        string tindakan;
+        bool agreement; // persetujuan tindakan bila diperlukan
+        string obs; // catatan hasil observasi klinis dan hasil pengobatan
+        string ds; // discharge summary / ringkasan pulang
+        address doctor; // identitas dokter atau tenaga kesehatan yang memberikan layanan kesehatan
+        string pelayanan; // pelayanan lain yang telah diberikan kepada pasien
+    }
+
+    struct PengantarPasien {
+        string nama_lengkap;
+        uint hp; // nomor hanphone
+        string hubungan; // hubungan pengantar dengan pasien
+    }
+
+    struct GawatDarurat {
+        IdentitasPasien patient_id; // indentitas pasien
+        string jenis; // gawat darurat
+        string kondisi; // kondisi saat pasien tiba
+        PengantarPasien pp;
+        string date_and_time;
+        string anamnesis; // mencakup keluhan dan riwat penyakit
+        string fisik; // hasil pemeriksaan fisik dan penunjang medik
+        string diagnosis;
+        string pengobatan;
+        string tindakan;
+        string lc; // ringkasan kondisi pasien sebelum meninggalkan pelayanan unit gawat darurat dan rencana tindak lanjut
+        string transport; // sarana transportasi yang digunakan bagi pasien yang akan dipindahkan ke saran pelayanan kesehatan lain
+
+    }
+
     struct PatientData {
         address patientAddress;
         string nama_lengkap;
-        uint256 umur;
+        uint umur;
         string tanggal_lahir;
         string tanggal_masuk;
         string tanggal_keluar;
@@ -46,6 +106,11 @@ contract Patient {
     }
 
     mapping(address => PatientData) private Patient_Data;
+
+    mapping(address => RawatJalan) public outPatient;
+
+    mapping(address => IdentitasPasien) public patientId;
+
     address private admin; 
     DoctorVerificator doctor_verificator;
     PatientVerificator patient_verificator;
@@ -67,6 +132,38 @@ contract Patient {
         doctor_relation = DoctorRelation(_DoctorRelationAddress);
     }
 
+    function addOutPatient (
+        IdentitasPasien memory _identitasPasien,
+        RawatJalan memory _rawatjalan
+        ) public {
+        
+        IdentitasPasien memory identitasPasien;
+        identitasPasien.patientAddress =  _identitasPasien.patientAddress;
+        identitasPasien.nama_lengkap =  _identitasPasien.nama_lengkap;
+        identitasPasien.umur =  _identitasPasien.umur;
+        identitasPasien.tanggal_lahir =  _identitasPasien.tanggal_lahir;
+
+        patientId[_identitasPasien.patientAddress] = identitasPasien;
+
+        RawatJalan memory rawatJalan;
+        rawatJalan.patient_address = _rawatjalan.patient_address;
+        rawatJalan.jenis = _rawatjalan.jenis;
+        rawatJalan.date_and_time = _rawatjalan.date_and_time;
+        rawatJalan.anamnesis = _rawatjalan.anamnesis;
+        rawatJalan.diagnosis = _rawatjalan.diagnosis;
+        rawatJalan.rp = _rawatjalan.rp;
+        rawatJalan.pengobatan = _rawatjalan.pengobatan;
+        rawatJalan.tindakan = _rawatjalan.tindakan;
+        rawatJalan.pelayanan = _rawatjalan.pelayanan;
+        rawatJalan.agreement = _rawatjalan.agreement;
+
+        outPatient[_identitasPasien.patientAddress] = rawatJalan;
+    }
+
+    function getOutPatient(address add) public view returns(IdentitasPasien memory a, RawatJalan memory b) {
+        return (patientId[add], outPatient[add]);
+    }
+
     function setPatientData(
         address _patient,
         string memory _nama_lengkap,
@@ -78,7 +175,7 @@ contract Patient {
         string memory _diagnosis
 
     ) public onlyDoctor { 
-        PatientData storage newPatientData = Patient_Data[_patient];
+        PatientData memory newPatientData = Patient_Data[_patient];
         newPatientData.patientAddress = _patient;
         newPatientData.nama_lengkap = _nama_lengkap;
         newPatientData.umur = _umur;
@@ -238,4 +335,18 @@ contract DoctorRelation {
     }
 
 
+}
+
+contract StackTooDeepTest3 {
+    struct UintPair {
+        uint256 value1;
+        uint256 value2;
+    }
+    
+    function addUints(
+        UintPair memory a, UintPair memory b, UintPair memory c, UintPair memory d
+    ) public pure returns(uint256 e) {
+        
+        return a.value1+a.value2+b.value1+b.value2+c.value1+c.value2+d.value1+d.value2+e;
+    }
 }

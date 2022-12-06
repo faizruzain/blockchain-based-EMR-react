@@ -1,6 +1,7 @@
 import { Component } from "react";
 import PtientsList from "./patientslist.component";
 import Bio from "./bio.component";
+import NewPatient from "./new-patient.component";
 
 class Content extends Component {
   state = {
@@ -14,8 +15,8 @@ class Content extends Component {
       return <Bio />;
     } else if (content === "myPatients") {
       return <PtientsList />;
-    } else {
-      <h1>LogOut {content}</h1>;
+    } else if (content === "newPatient") {
+      return <NewPatient />;
     }
   }
 }
