@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.17;
-pragma experimental ABIEncoderV2;
 
 contract ContractDeployer {
     struct ContractAddress {
@@ -14,7 +13,7 @@ contract ContractDeployer {
     constructor() {
         admin = msg.sender;
 
-        address patient = address(new Patient(msg.sender));
+        address patient = address(new MedicalRecords(msg.sender));
         bunchOfContractAddress["secret"].push(ContractAddress("patient", patient));
 
         address patientVerificator = address(new PatientVerificator(msg.sender));
@@ -34,12 +33,13 @@ contract ContractDeployer {
     }
 }
 
-contract Patient {
+contract MedicalRecords {
     struct IdentitasPasien {
         address patientAddress;
         string nama_lengkap;
         uint umur;
         string tanggal_lahir;
+        string gender;
     }
 
     struct RawatJalan {
@@ -56,7 +56,8 @@ contract Patient {
     }
 
     struct RawatInap {
-        IdentitasPasien patient_id; // indentitas pasien
+        // IdentitasPasien patient_id; // indentitas pasien
+        address patient_address;
         string jenis; // rawat inap
         string date_and_time;
         string anamnesis; // mencakup keluhan dan riwat penyakit
@@ -72,17 +73,10 @@ contract Patient {
         string pelayanan; // pelayanan lain yang telah diberikan kepada pasien
     }
 
-    struct PengantarPasien {
-        string nama_lengkap;
-        uint hp; // nomor hanphone
-        string hubungan; // hubungan pengantar dengan pasien
-    }
-
     struct GawatDarurat {
-        IdentitasPasien patient_id; // indentitas pasien
+        address patient_address;
         string jenis; // gawat darurat
         string kondisi; // kondisi saat pasien tiba
-        PengantarPasien pp;
         string date_and_time;
         string anamnesis; // mencakup keluhan dan riwat penyakit
         string fisik; // hasil pemeriksaan fisik dan penunjang medik
@@ -94,22 +88,18 @@ contract Patient {
 
     }
 
-    struct PatientData {
-        address patientAddress;
+    struct PengantarPasien {
+        string pengantar_pasien;
         string nama_lengkap;
-        uint umur;
-        string tanggal_lahir;
-        string tanggal_masuk;
-        string tanggal_keluar;
-        string anamnesis;
-        string diagnosis;
+        uint hp; // nomor hanphone
+        string hubungan; // hubungan pengantar dengan pasien
     }
 
-    mapping(address => PatientData) private Patient_Data;
-
-    mapping(address => RawatJalan) public outPatient;
-
-    mapping(address => IdentitasPasien) public patientId;
+    mapping(address => IdentitasPasien) private patientId;
+    mapping(address => PengantarPasien) private pengantar_pasien;
+    mapping(address => RawatJalan) private outPatient;
+    mapping(address => RawatInap) private inPatient;
+    mapping(address => GawatDarurat) private emergencyPatient;
 
     address private admin; 
     DoctorVerificator doctor_verificator;
@@ -132,16 +122,13 @@ contract Patient {
         doctor_relation = DoctorRelation(_DoctorRelationAddress);
     }
 
-    function addOutPatient (
-        IdentitasPasien memory _identitasPasien,
-        RawatJalan memory _rawatjalan
-        ) public {
-        
+    function addOutPatient (IdentitasPasien memory _identitasPasien, RawatJalan memory _rawatjalan) onlyDoctor public {
         IdentitasPasien memory identitasPasien;
         identitasPasien.patientAddress =  _identitasPasien.patientAddress;
         identitasPasien.nama_lengkap =  _identitasPasien.nama_lengkap;
         identitasPasien.umur =  _identitasPasien.umur;
         identitasPasien.tanggal_lahir =  _identitasPasien.tanggal_lahir;
+        identitasPasien.gender =  _identitasPasien.gender;
 
         patientId[_identitasPasien.patientAddress] = identitasPasien;
 
@@ -158,66 +145,81 @@ contract Patient {
         rawatJalan.agreement = _rawatjalan.agreement;
 
         outPatient[_identitasPasien.patientAddress] = rawatJalan;
+
+        patient_verificator.addPatient(_identitasPasien.patientAddress);
+        doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.patientAddress);
+    }
+
+    function addInPatient(IdentitasPasien memory _identitasPasien, RawatInap memory _rawatInap) onlyDoctor public {
+        IdentitasPasien memory identitasPasien;
+        identitasPasien.patientAddress =  _identitasPasien.patientAddress;
+        identitasPasien.nama_lengkap =  _identitasPasien.nama_lengkap;
+        identitasPasien.umur =  _identitasPasien.umur;
+        identitasPasien.tanggal_lahir =  _identitasPasien.tanggal_lahir;
+        identitasPasien.gender =  _identitasPasien.gender;
+
+        patientId[_identitasPasien.patientAddress] = identitasPasien;
+
+        RawatInap memory rawatInap;
+        rawatInap.patient_address = _rawatInap.patient_address;
+        rawatInap.jenis = _rawatInap.jenis; 
+        rawatInap.date_and_time = _rawatInap.date_and_time;
+        rawatInap.anamnesis = _rawatInap.anamnesis; 
+        rawatInap.fisik = _rawatInap.fisik; 
+        rawatInap.diagnosis = _rawatInap.diagnosis;
+        rawatInap.rp = _rawatInap.rp; 
+        rawatInap.pengobatan = _rawatInap.pengobatan;
+        rawatInap.tindakan = _rawatInap.tindakan;
+        rawatInap.agreement = _rawatInap.agreement;
+        rawatInap.obs = _rawatInap.obs;
+        rawatInap.ds = _rawatInap.ds;
+        rawatInap.doctor = _rawatInap.doctor;
+        rawatInap.pelayanan = _rawatInap.pelayanan;
+
+        inPatient[_rawatInap.patient_address] = rawatInap;
+
+        patient_verificator.addPatient(_identitasPasien.patientAddress);
+        doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.patientAddress);
+    }
+
+    function addEmergencyPatient(PengantarPasien memory _pengantar, GawatDarurat memory _gawatDarurat) onlyDoctor public {
+        PengantarPasien memory pengantarPasien;
+        pengantarPasien.pengantar_pasien = _pengantar.pengantar_pasien;
+        pengantarPasien.nama_lengkap = _pengantar.nama_lengkap;
+        pengantarPasien.hp = _pengantar.hp;
+        pengantarPasien.hubungan = _pengantar.hubungan;
+
+        pengantar_pasien[_gawatDarurat.patient_address] = pengantarPasien;
+
+        GawatDarurat memory gawatDarurat;
+        gawatDarurat.patient_address = _gawatDarurat.patient_address;
+        gawatDarurat.jenis = _gawatDarurat.jenis;
+        gawatDarurat.kondisi = _gawatDarurat.kondisi;
+        gawatDarurat.date_and_time = _gawatDarurat.date_and_time;
+        gawatDarurat.anamnesis = _gawatDarurat.anamnesis;
+        gawatDarurat.fisik = _gawatDarurat.fisik;
+        gawatDarurat.diagnosis = _gawatDarurat.diagnosis;
+        gawatDarurat.pengobatan = _gawatDarurat.pengobatan;
+        gawatDarurat.tindakan = _gawatDarurat.tindakan;
+        gawatDarurat.lc = _gawatDarurat.lc;
+        gawatDarurat.transport = _gawatDarurat.transport;
+
+        emergencyPatient[_gawatDarurat.patient_address] = gawatDarurat;
+
+        patient_verificator.addPatient(_gawatDarurat.patient_address);
+        doctor_relation.addDoctorRelation(msg.sender, _gawatDarurat.patient_address);
     }
 
     function getOutPatient(address add) public view returns(IdentitasPasien memory a, RawatJalan memory b) {
         return (patientId[add], outPatient[add]);
     }
 
-    function setPatientData(
-        address _patient,
-        string memory _nama_lengkap,
-        uint256 _umur,
-        string memory _tanggal_lahir,
-        string memory _tanggal_masuk,
-        string memory _tanggal_keluar,
-        string memory _anamnesis,
-        string memory _diagnosis
-
-    ) public onlyDoctor { 
-        PatientData memory newPatientData = Patient_Data[_patient];
-        newPatientData.patientAddress = _patient;
-        newPatientData.nama_lengkap = _nama_lengkap;
-        newPatientData.umur = _umur;
-        newPatientData.tanggal_lahir = _tanggal_lahir;
-        newPatientData.tanggal_masuk = _tanggal_masuk;
-        newPatientData.tanggal_keluar = _tanggal_keluar;
-        newPatientData.anamnesis = _anamnesis;
-        newPatientData.diagnosis = _diagnosis;
-
-        patient_verificator.addPatient(_patient);
-        doctor_relation.addDoctorRelation(msg.sender, _patient);
-
+    function getInPatient(address add) public view returns(IdentitasPasien memory a, RawatInap memory b) {
+        return (patientId[add], inPatient[add]);
     }
 
-    function getPatientData(address _address)
-        public
-        view
-        onlyDoctorOrPatient
-        returns (PatientData memory data)
-    {
-        return Patient_Data[_address];
-    }
-
-    function updatePatientData(
-        address _patient,
-        string memory _nama_lengkap,
-        uint256 _umur,
-        string memory _tanggal_lahir,
-        string memory _tanggal_masuk,
-        string memory _tanggal_keluar,
-        string memory _anamnesis,
-        string memory _diagnosis
-
-    ) public { 
-        PatientData storage existingPatientData = Patient_Data[_patient];
-        existingPatientData.nama_lengkap = _nama_lengkap;
-        existingPatientData.umur = _umur;
-        existingPatientData.tanggal_lahir = _tanggal_lahir;
-        existingPatientData.tanggal_masuk = _tanggal_masuk;
-        existingPatientData.tanggal_keluar = _tanggal_keluar;
-        existingPatientData.anamnesis = _anamnesis;
-        existingPatientData.diagnosis = _diagnosis;
+    function getEmergencyPatient(address add) public view returns(IdentitasPasien memory a, GawatDarurat memory b) {
+        return (patientId[add], emergencyPatient[add]);
     }
 
     modifier onlyDoctor() {
@@ -229,7 +231,6 @@ contract Patient {
         require(doctor_verificator.verify(msg.sender) || patient_verificator.verify(msg.sender));
         _;
     }
-
 }
 
 contract PatientVerificator {
@@ -243,11 +244,10 @@ contract PatientVerificator {
         admin = _admin;
     }
 
-    function addPatient(address _address) onlyAdmin public {
+    function addPatient(address _address) public {
         require(!patient[_address]);      
         patient[_address] = true;
-        patients.push(_address);
-        
+        patients.push(_address);        
     }
 
     function verify(address _address) public view returns(bool _bool) {
@@ -256,7 +256,6 @@ contract PatientVerificator {
         } else {
             return false;
         }
-
     }
 
     function getAllPatients() onlyAdmin public view returns(address[] memory _address) {
@@ -283,8 +282,7 @@ contract DoctorVerificator {
     function addDoctor(address _address) onlyAdmin public {
         require(!doctor[_address]);      
         doctor[_address] = true;
-        doctors.push(_address);
-        
+        doctors.push(_address);      
     }
 
     function verify(address _address) public view returns(bool _bool) {
@@ -293,7 +291,6 @@ contract DoctorVerificator {
         } else {
             return false;
         }
-
     }
 
     function getAllDoctors() onlyAdmin public view returns(address[] memory _address) {
@@ -321,7 +318,7 @@ contract DoctorRelation {
         doctor_verificator = DoctorVerificator(_DoctorVerificatorAddress);
     }
 
-    function addDoctorRelation(address _doctor, address _patient) public onlyDoctor (msg.sender) {
+    function addDoctorRelation(address _doctor, address _patient) onlyDoctor(_doctor) public {
         relatedPatien[_doctor].push(_patient);
     }
 
@@ -332,21 +329,5 @@ contract DoctorRelation {
     modifier onlyDoctor(address _doctor) {
         require(doctor_verificator.verify(_doctor));
         _;
-    }
-
-
-}
-
-contract StackTooDeepTest3 {
-    struct UintPair {
-        uint256 value1;
-        uint256 value2;
-    }
-    
-    function addUints(
-        UintPair memory a, UintPair memory b, UintPair memory c, UintPair memory d
-    ) public pure returns(uint256 e) {
-        
-        return a.value1+a.value2+b.value1+b.value2+c.value1+c.value2+d.value1+d.value2+e;
     }
 }
