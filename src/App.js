@@ -10,7 +10,7 @@ class App extends Component {
   render() {
     return (
       <Container
-        fluid
+        
         style={{ marginTop: "20px", marginRight: "20px", marginLeft: "20px" }}
       >
         <Routes>
