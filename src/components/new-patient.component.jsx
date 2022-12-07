@@ -1,9 +1,8 @@
 import { Component } from "react";
-import { Form } from "semantic-ui-react";
+import { Form, Transition } from "semantic-ui-react";
 import RawatJalan from "./rawat-jalan.component";
 import RawatInap from "./rawat-inap.component";
-import Emergency from "./emergency.component";
-import MyForms from "./my-forms.component";
+import GawatDarurat from "./gawat-darurat.component";
 
 const jenis = [
   { key: "a", text: "Rawat Jalan", value: "rawatJalan" },
@@ -12,7 +11,10 @@ const jenis = [
 ];
 
 class NewPatient extends Component {
-  state = { jenis: "" };
+  constructor() {
+    super();
+    this.state = { jenis: "" };
+  }
 
   test = (e) => {
     this.setState({
@@ -20,23 +22,33 @@ class NewPatient extends Component {
     });
   };
 
+  onSubmit = (e) => {
+    e.preventDefault();
+    const elements = e.target.elements; // object
+    
+  };
+
+  polo = (e) => {
+    console.log(e.target.value);
+  }
+
   render() {
     const renderJenis = () => {
       const jenis = this.state.jenis;
       if (jenis === "Rawat Jalan") {
         console.log(jenis);
-        return <RawatJalan />;
+        return <RawatJalan handler={this.polo} />;
       } else if (jenis === "Rawat Inap") {
         console.log(jenis);
         return <RawatInap />;
       } else if (jenis === "Emergency") {
         console.log(jenis);
-        return <Emergency />;
+        return <GawatDarurat />;
       }
     };
 
     return (
-      <Form widths="equal">
+      <Form onSubmit={this.onSubmit} widths="equal">
         <Form.Group>
           <Form.Select
             fluid
@@ -47,9 +59,7 @@ class NewPatient extends Component {
           />
         </Form.Group>
 
-        <Form.Group>{renderJenis()}</Form.Group>
-
-        <MyForms jenis={this.state.jenis} />
+        {renderJenis()}
       </Form>
     );
   }

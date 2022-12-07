@@ -4,18 +4,20 @@ import { Form, Grid, Button } from "semantic-ui-react";
 
 const texts = [
   { text: "Anamnesis" },
+  { text: "Fisik" },
   { text: "Diagnosis" },
   { text: "Rencana Penatalaksanaan" },
   { text: "Pengobatan" },
   { text: "Tindakan" },
   { text: "Pelayanan" },
+  { text: "Hasil Observasi" },
+  { text: "Ringkasan Pulang" },
+  { text: "Pelayanan" },
 ];
 
-class FormRawatJalan extends Component {
+class FormRawatInap extends Component {
   state = {};
-
   render() {
-    console.log(this.props);
     return (
       <Fragment>
         <Grid columns={2}>
@@ -24,13 +26,13 @@ class FormRawatJalan extends Component {
               return (
                 <Grid.Column key={index}>
                   <label>{text.text}</label>
-                  <TextareaAutosize onChange={this.props.handler} />
+                  <TextareaAutosize />
                 </Grid.Column>
               );
             })}
           </Grid.Row>
         </Grid>
-        
+
         <Button style={{marginTop: "15px"}} fluid positive type="submit">
           Submit
         </Button>
@@ -39,4 +41,4 @@ class FormRawatJalan extends Component {
   }
 }
 
-export default FormRawatJalan;
+export default FormRawatInap;

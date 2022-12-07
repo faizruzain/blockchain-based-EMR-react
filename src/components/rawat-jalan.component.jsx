@@ -1,5 +1,6 @@
 import { Component, Fragment } from "react";
 import { Form } from "semantic-ui-react";
+import FormRawatJalan from "./form-rawat-jalan.component";
 
 const options = [
   { key: "m", text: "Laki-Laki", value: "male" },
@@ -32,25 +33,36 @@ const inputs = [
 class RawatJalan extends Component {
   state = {};
   render() {
+    console.log(this.props);
     return (
       <Fragment>
-        {inputs.map((input, index) => {
-          return (
-            <Form.Input
-              key={index}
-              label={input.label}
-              placeholder={input.placeholder}
-              type={input.type}
-            />
-          );
-        })}
+        <Form.Group>
+          {inputs.map((input, index) => {
+            return (
+              <Form.Input
+                key={index}
+                label={input.label}
+                placeholder={input.placeholder}
+                type={input.type}
+              />
+            );
+          })}
 
-        <Form.Select
-          fluid
-          label="Gender"
-          options={options}
-          placeholder="Gender"
+          <Form.Select
+            fluid
+            label="Gender"
+            options={options}
+            placeholder="Gender"
+          />
+        </Form.Group>
+
+        <Form.Input
+          type="date"
+          label="Tanggal Masuk"
+          placeholder="Tanggal Masuk"
         />
+
+        <FormRawatJalan handler={this.props.handler}/>
       </Fragment>
     );
   }

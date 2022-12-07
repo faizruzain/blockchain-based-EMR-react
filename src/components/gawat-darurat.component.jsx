@@ -1,6 +1,6 @@
 import { Component, Fragment } from "react";
 import { Form } from "semantic-ui-react";
-import FormRawatInap from "./form-rawat-inap.component";
+import FormGawatDarurat from "./form-gawat-darurat.component";
 
 const options = [
   { key: "m", text: "Laki-Laki", value: "male" },
@@ -9,32 +9,28 @@ const options = [
 
 const inputs = [
   {
-    label: "ID Pasien",
-    placeholder: "ID Pasien",
-    type: "text",
-  },
-  {
     label: "Nama Lengkap",
     placeholder: "Nama Lengkap",
     type: "text",
   },
   {
-    label: "Umur",
-    placeholder: "Umur",
+    label: "Kontak",
+    placeholder: "Kontak",
     type: "text",
   },
   {
-    label: "Tanggal Lahir",
-    placeholder: "Tanggal Lahir",
-    type: "date",
+    label: "Hubungan",
+    placeholder: "Hubungan",
+    type: "text",
   },
 ];
 
-class RawatInap extends Component {
+class GawatDarurat extends Component {
   state = {};
   render() {
     return (
       <Fragment>
+        <h5>Identitas Pengantar Pasien</h5>
         <Form.Group>
           {inputs.map((input, index) => {
             return (
@@ -46,13 +42,6 @@ class RawatInap extends Component {
               />
             );
           })}
-
-          <Form.Select
-            fluid
-            label="Gender"
-            options={options}
-            placeholder="Gender"
-          />
         </Form.Group>
 
         <Form.Input
@@ -61,10 +50,10 @@ class RawatInap extends Component {
           placeholder="Tanggal Masuk"
         />
 
-        <FormRawatInap/>
+        <FormGawatDarurat/>
       </Fragment>
     );
   }
 }
 
-export default RawatInap;
+export default GawatDarurat;
