@@ -27,7 +27,7 @@ class NewPatient extends Component {
         },
         address: "",
         jenis: "",
-        dateAndTime: "",
+        tanggalMasuk: "",
         anamnesis: "",
         diagnosis: "",
         rp: "",
@@ -46,7 +46,7 @@ class NewPatient extends Component {
         },
         address: "",
         jenis: "",
-        dateAndTime: "",
+        tanggalMasuk: "",
         anamnesis: "",
         fisik: "",
         diagnosis: "",
@@ -56,7 +56,7 @@ class NewPatient extends Component {
         agreement: true,
         observasi: "",
         ds: "",
-        doctor: "",
+        doctor: "", // get from wallet
         pelayanan: "",
       },
       gawatDarurat: {
@@ -66,10 +66,10 @@ class NewPatient extends Component {
           hp: "",
           hubungan: "",
         },
-        address: "",
+        address: "", // new account from wallet
         jenis: "",
         konsdisi: "",
-        dateAndTime: "",
+        tanggalMasuk: "",
         anamnesis: "",
         fisik: "",
         diagnosis: "",
@@ -77,6 +77,7 @@ class NewPatient extends Component {
         tindakan: "",
         lc: "",
         transport: "",
+        gender: "",
       },
     };
   }
@@ -95,12 +96,24 @@ class NewPatient extends Component {
     const jenis = this.state.jenis;
     switch (jenis) {
       case "Rawat Jalan":
-        console.log(jenis);
         const { rawatJalan } = this.state;
         rawatJalan[e.target.name] = e.target.value;
         this.setState({ rawatJalan });
-        const a = this.state.rawatJalan;
-        console.log(a);
+
+        break;
+
+      case "Rawat Inap":
+        const { rawatInap } = this.state;
+        rawatInap[e.target.name] = e.target.value;
+        this.setState({ rawatInap });
+
+        break;
+
+      case "Emergency":
+        const { gawatDarurat } = this.state;
+        gawatDarurat[e.target.name] = e.target.value;
+        this.setState({ gawatDarurat });
+
         break;
 
       default:
@@ -112,8 +125,9 @@ class NewPatient extends Component {
     console.log(e.target.value);
   };
 
-  getSelectValue = (e) => {
+  getSelectValue = (e, {value, gender}) => {
     console.log(e.target.innerText);
+    console.log(value, gender);
   };
 
   render() {
@@ -130,10 +144,22 @@ class NewPatient extends Component {
         );
       } else if (jenis === "Rawat Inap") {
         console.log(jenis);
-        return <RawatInap />;
+        return (
+          <RawatInap
+            textAreaHandler={this.getTextAreaValue}
+            inputHandler={this.getInputValue}
+            selectHandler={this.getSelectValue}
+          />
+        );
       } else if (jenis === "Emergency") {
         console.log(jenis);
-        return <GawatDarurat />;
+        return (
+          <GawatDarurat
+            textAreaHandler={this.getTextAreaValue}
+            inputHandler={this.getInputValue}
+            selectHandler={this.getSelectValue}
+          />
+        );
       }
     };
 

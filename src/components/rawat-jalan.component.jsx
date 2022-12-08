@@ -60,7 +60,7 @@ class RawatJalan extends Component {
             fluid
             label="Gender"
             options={options}
-            name="gender"
+            title="gender"
             placeholder="Gender"
             onChange={selectHandler}
           />
@@ -70,6 +70,7 @@ class RawatJalan extends Component {
           type="date"
           label="Tanggal Masuk"
           placeholder="Tanggal Masuk"
+          title="tanggalMasuk"
           onChange={inputHandler}
         />
 

@@ -12,22 +12,26 @@ const inputs = [
     label: "Nama Lengkap",
     placeholder: "Nama Lengkap",
     type: "text",
+    name: "fullname",
   },
   {
     label: "Kontak",
     placeholder: "Kontak",
     type: "text",
+    name: "hp",
   },
   {
     label: "Hubungan",
     placeholder: "Hubungan",
     type: "text",
+    name: "hubungan",
   },
 ];
 
 class GawatDarurat extends Component {
   state = {};
   render() {
+    const { textAreaHandler, inputHandler, selectHandler } = this.props;
     return (
       <Fragment>
         <h5>Identitas Pengantar Pasien</h5>
@@ -39,18 +43,41 @@ class GawatDarurat extends Component {
                 label={input.label}
                 placeholder={input.placeholder}
                 type={input.type}
+                name={input.name}
               />
             );
           })}
+
+          <Form.Select
+            fluid
+            label="Gender"
+            options={options}
+            title="gender"
+            placeholder="Gender"
+            onChange={selectHandler}
+          />
         </Form.Group>
 
-        <Form.Input
-          type="date"
-          label="Tanggal Masuk"
-          placeholder="Tanggal Masuk"
-        />
+        <Form.Group>
+          <Form.Select
+            fluid
+            label="Jenis Kelamin Pasien"
+            options={options}
+            title="gender"
+            placeholder="Gender"
+            onChange={selectHandler}
+          />
 
-        <FormGawatDarurat/>
+          <Form.Input
+            type="date"
+            label="Tanggal Masuk"
+            placeholder="Tanggal Masuk"
+            name="tanggalMasuk"
+            onChange={inputHandler}
+          />
+        </Form.Group>
+
+        <FormGawatDarurat textAreaHandler={textAreaHandler} />
       </Fragment>
     );
   }

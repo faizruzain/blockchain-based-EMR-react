@@ -3,18 +3,20 @@ import TextareaAutosize from "react-textarea-autosize";
 import { Form, Grid, Button } from "semantic-ui-react";
 
 const texts = [
-  { text: "Kondisi" },
-  { text: "Anamnesis" },
-  { text: "Fisik" },
-  { text: "Diagnosis" },
-  { text: "Pengobatan" },
-  { text: "Kondisi Terakhir" },
-  { text: "Transport" },
+  { text: "Kondisi", name: "kondisi" },
+  { text: "Anamnesis", name: "anamnesis" },
+  { text: "Fisik", name: "fisik" },
+  { text: "Diagnosis", name: "diagnosis" },
+  { text: "Pengobatan", name: "pengobatan" },
+  { text: "Tindakan", name: "tindakan" },
+  { text: "Kondisi Terakhir", name: "lc" },
+  { text: "Transport", name: "transport" },
 ];
 
 class FormGawatDarurat extends Component {
   state = {};
   render() {
+    const { textAreaHandler } = this.props;
     return (
       <Fragment>
         <Grid columns={2}>
@@ -23,7 +25,7 @@ class FormGawatDarurat extends Component {
               return (
                 <Grid.Column key={index}>
                   <label>{text.text}</label>
-                  <TextareaAutosize />
+                  <TextareaAutosize name={text.name} onChange={textAreaHandler} />
                 </Grid.Column>
               );
             })}

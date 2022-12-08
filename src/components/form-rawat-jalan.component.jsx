@@ -16,8 +16,6 @@ class FormRawatJalan extends Component {
 
   render() {
     const { textAreaHandler } = this.props;
-    // const { myRef } = this.props;
-    // console.log(textAreaHandler);
     return (
       <Fragment>
         <Grid columns={2}>
