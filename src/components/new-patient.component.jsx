@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import { Form, Transition } from "semantic-ui-react";
 import RawatJalan from "./rawat-jalan.component";
 import RawatInap from "./rawat-inap.component";
@@ -13,31 +13,121 @@ const jenis = [
 class NewPatient extends Component {
   constructor() {
     super();
-    this.state = { jenis: "" };
+    // this.inputRef = React.createRef();
+    // this.myRef = React.createRef();
+    this.state = {
+      jenis: "",
+      rawatJalan: {
+        patientId: {
+          address: "",
+          fullname: "",
+          umur: "",
+          dob: "",
+          gender: "",
+        },
+        address: "",
+        jenis: "",
+        dateAndTime: "",
+        anamnesis: "",
+        diagnosis: "",
+        rp: "",
+        pengobatan: "",
+        tindakan: "",
+        pelayanan: "",
+        agreement: true,
+      },
+      rawatInap: {
+        patientId: {
+          address: "",
+          fullname: "",
+          umur: "",
+          dob: "",
+          gender: "",
+        },
+        address: "",
+        jenis: "",
+        dateAndTime: "",
+        anamnesis: "",
+        fisik: "",
+        diagnosis: "",
+        rp: "",
+        pengobatan: "",
+        tindakan: "",
+        agreement: true,
+        observasi: "",
+        ds: "",
+        doctor: "",
+        pelayanan: "",
+      },
+      gawatDarurat: {
+        pengantar: {
+          pengantarPasien: "Pengantar Pasien",
+          fullname: "",
+          hp: "",
+          hubungan: "",
+        },
+        address: "",
+        jenis: "",
+        konsdisi: "",
+        dateAndTime: "",
+        anamnesis: "",
+        fisik: "",
+        diagnosis: "",
+        pengobatan: "",
+        tindakan: "",
+        lc: "",
+        transport: "",
+      },
+    };
   }
 
-  test = (e) => {
-    this.setState({
-      jenis: e.target.innerText,
-    });
+  renderForm = (e) => {
+    this.setState({ jenis: e.target.innerText });
   };
 
   onSubmit = (e) => {
     e.preventDefault();
-    const elements = e.target.elements; // object
-    
+    // const elements = e.target.elements; // object
   };
 
-  polo = (e) => {
+  getTextAreaValue = (e) => {
+    // console.log(e.target); // by name
+    const jenis = this.state.jenis;
+    switch (jenis) {
+      case "Rawat Jalan":
+        console.log(jenis);
+        const { rawatJalan } = this.state;
+        rawatJalan[e.target.name] = e.target.value;
+        this.setState({ rawatJalan });
+        const a = this.state.rawatJalan;
+        console.log(a);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  getInputValue = (e) => {
     console.log(e.target.value);
-  }
+  };
+
+  getSelectValue = (e) => {
+    console.log(e.target.innerText);
+  };
 
   render() {
     const renderJenis = () => {
       const jenis = this.state.jenis;
       if (jenis === "Rawat Jalan") {
         console.log(jenis);
-        return <RawatJalan handler={this.polo} />;
+        return (
+          <RawatJalan
+            textAreaHandler={this.getTextAreaValue}
+            inputHandler={this.getInputValue}
+            selectHandler={this.getSelectValue}
+          />
+        );
       } else if (jenis === "Rawat Inap") {
         console.log(jenis);
         return <RawatInap />;
@@ -55,7 +145,7 @@ class NewPatient extends Component {
             label="Jenis Pasien"
             options={jenis}
             placeholder="Jenis Pasien"
-            onChange={this.test}
+            onChange={this.renderForm}
           />
         </Form.Group>
 

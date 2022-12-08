@@ -12,28 +12,34 @@ const inputs = [
     label: "ID Pasien",
     placeholder: "ID Pasien",
     type: "text",
+    name: "address"
   },
   {
     label: "Nama Lengkap",
     placeholder: "Nama Lengkap",
     type: "text",
+    name: "fullname"
   },
   {
     label: "Umur",
     placeholder: "Umur",
     type: "text",
+    name: "umur"
   },
   {
     label: "Tanggal Lahir",
     placeholder: "Tanggal Lahir",
     type: "date",
+    name: "dob"
   },
 ];
 
 class RawatJalan extends Component {
-  state = {};
+  state = { selectValue: "" };
   render() {
-    console.log(this.props);
+    const { textAreaHandler, inputHandler, selectHandler } = this.props;
+    // const { myRef } = this.props;
+    // console.log(textAreaHandler, inputHandler);
     return (
       <Fragment>
         <Form.Group>
@@ -44,6 +50,8 @@ class RawatJalan extends Component {
                 label={input.label}
                 placeholder={input.placeholder}
                 type={input.type}
+                name={input.name}
+                onChange={inputHandler}
               />
             );
           })}
@@ -52,7 +60,9 @@ class RawatJalan extends Component {
             fluid
             label="Gender"
             options={options}
+            name="gender"
             placeholder="Gender"
+            onChange={selectHandler}
           />
         </Form.Group>
 
@@ -60,9 +70,10 @@ class RawatJalan extends Component {
           type="date"
           label="Tanggal Masuk"
           placeholder="Tanggal Masuk"
+          onChange={inputHandler}
         />
 
-        <FormRawatJalan handler={this.props.handler}/>
+        <FormRawatJalan textAreaHandler={textAreaHandler} />
       </Fragment>
     );
   }
