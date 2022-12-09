@@ -3,8 +3,8 @@ import { Form } from "semantic-ui-react";
 import FormRawatJalan from "./form-rawat-jalan.component";
 
 const options = [
-  { key: "m", text: "Laki-Laki", value: "male" },
-  { key: "f", text: "Perempuan", value: "female" },
+  { key: "m", text: "Laki-Laki", value: "gender" },
+  { key: "f", text: "Perempuan", value: "gender" },
 ];
 
 const inputs = [
@@ -58,10 +58,10 @@ class RawatJalan extends Component {
 
           <Form.Select
             fluid
-            label="Gender"
+            label="Jenis Kelamin Pasien"
             options={options}
             title="gender"
-            placeholder="Gender"
+            placeholder="Jenis Kelamin Pasien"
             onChange={selectHandler}
           />
         </Form.Group>
@@ -70,7 +70,7 @@ class RawatJalan extends Component {
           type="date"
           label="Tanggal Masuk"
           placeholder="Tanggal Masuk"
-          title="tanggalMasuk"
+          name="tanggalMasuk"
           onChange={inputHandler}
         />
 

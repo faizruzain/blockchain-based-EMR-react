@@ -3,12 +3,18 @@ import { Form } from "semantic-ui-react";
 import FormGawatDarurat from "./form-gawat-darurat.component";
 
 const options = [
-  { key: "m", text: "Laki-Laki", value: "male" },
-  { key: "f", text: "Perempuan", value: "female" },
+  { key: "m", text: "Laki-Laki", value: "gender" },
+  { key: "f", text: "Perempuan", value: "gender" },
 ];
 
 const inputs = [
   {
+    label: "ID Pasien",
+    placeholder: "ID Pasien",
+    type: "text",
+    name: "address"
+  }
+  ,{
     label: "Nama Lengkap",
     placeholder: "Nama Lengkap",
     type: "text",
@@ -44,6 +50,7 @@ class GawatDarurat extends Component {
                 placeholder={input.placeholder}
                 type={input.type}
                 name={input.name}
+                onChange={inputHandler}
               />
             );
           })}
@@ -64,7 +71,7 @@ class GawatDarurat extends Component {
             label="Jenis Kelamin Pasien"
             options={options}
             title="gender"
-            placeholder="Gender"
+            placeholder="Jenis Kelamin Pasien"
             onChange={selectHandler}
           />
 

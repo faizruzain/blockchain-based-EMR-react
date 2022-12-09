@@ -13,12 +13,10 @@ const jenis = [
 class NewPatient extends Component {
   constructor() {
     super();
-    // this.inputRef = React.createRef();
-    // this.myRef = React.createRef();
     this.state = {
       jenis: "",
       rawatJalan: {
-        patientId: {
+        patientIdRJ: {
           address: "",
           fullname: "",
           umur: "",
@@ -26,7 +24,7 @@ class NewPatient extends Component {
           gender: "",
         },
         address: "",
-        jenis: "",
+        jenis: "Rawat Jalan",
         tanggalMasuk: "",
         anamnesis: "",
         diagnosis: "",
@@ -37,7 +35,7 @@ class NewPatient extends Component {
         agreement: true,
       },
       rawatInap: {
-        patientId: {
+        patientIdRI: {
           address: "",
           fullname: "",
           umur: "",
@@ -45,7 +43,7 @@ class NewPatient extends Component {
           gender: "",
         },
         address: "",
-        jenis: "",
+        jenis: "Rawat Inap",
         tanggalMasuk: "",
         anamnesis: "",
         fisik: "",
@@ -67,7 +65,7 @@ class NewPatient extends Component {
           hubungan: "",
         },
         address: "", // new account from wallet
-        jenis: "",
+        jenis: "Gawat Darurat",
         konsdisi: "",
         tanggalMasuk: "",
         anamnesis: "",
@@ -88,11 +86,11 @@ class NewPatient extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    // const elements = e.target.elements; // object
+    const state = this.state;
+    console.log(state);
   };
 
   getTextAreaValue = (e) => {
-    // console.log(e.target); // by name
     const jenis = this.state.jenis;
     switch (jenis) {
       case "Rawat Jalan":
@@ -122,19 +120,73 @@ class NewPatient extends Component {
   };
 
   getInputValue = (e) => {
-    console.log(e.target.value);
+    const jenis = this.state.jenis;
+
+    switch (jenis) {
+      case "Rawat Jalan":
+        const { patientIdRJ } = this.state.rawatJalan;
+        const { rawatJalan } = this.state;
+        patientIdRJ[e.target.name] = e.target.value;
+        rawatJalan[e.target.name] = e.target.value;
+        this.setState({ patientIdRJ, rawatJalan });
+
+        break;
+
+      case "Rawat Inap":
+        const { patientIdRI } = this.state.rawatInap;
+        const { rawatInap } = this.state;
+        patientIdRI[e.target.name] = e.target.value;
+        rawatInap[e.target.name] = e.target.value;
+        this.setState({ patientIdRI, rawatInap });
+
+        break;
+
+      case "Emergency":
+        const { pengantar } = this.state.gawatDarurat;
+        pengantar[e.target.name] = e.target.value;
+        this.setState({ pengantar });
+
+        break;
+
+      default:
+        break;
+    }
   };
 
-  getSelectValue = (e, {value, gender}) => {
-    console.log(e.target.innerText);
-    console.log(value, gender);
+  getSelectValue = (e, { value }) => {
+    const jenis = this.state.jenis;
+
+    switch (jenis) {
+      case "Rawat Jalan":
+        const { patientIdRJ } = this.state.rawatJalan;
+        patientIdRJ[value] = e.target.innerText;
+        this.setState({ patientIdRJ });
+
+        break;
+
+      case "Rawat Inap":
+        const { patientIdRI } = this.state.rawatInap;
+        patientIdRI[value] = e.target.innerText;
+        this.setState({ patientIdRI });
+
+        break;
+
+      case "Emergency":
+        const { gawatDarurat } = this.state;
+        gawatDarurat[value] = e.target.innerText;
+        this.setState({ gawatDarurat });
+
+        break;
+
+      default:
+        break;
+    }
   };
 
   render() {
     const renderJenis = () => {
       const jenis = this.state.jenis;
       if (jenis === "Rawat Jalan") {
-        console.log(jenis);
         return (
           <RawatJalan
             textAreaHandler={this.getTextAreaValue}
@@ -143,7 +195,6 @@ class NewPatient extends Component {
           />
         );
       } else if (jenis === "Rawat Inap") {
-        console.log(jenis);
         return (
           <RawatInap
             textAreaHandler={this.getTextAreaValue}
@@ -152,7 +203,6 @@ class NewPatient extends Component {
           />
         );
       } else if (jenis === "Emergency") {
-        console.log(jenis);
         return (
           <GawatDarurat
             textAreaHandler={this.getTextAreaValue}
