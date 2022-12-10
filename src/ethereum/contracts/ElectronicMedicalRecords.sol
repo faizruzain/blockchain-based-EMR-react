@@ -76,6 +76,7 @@ contract MedicalRecords {
     struct GawatDarurat {
         address patient_address;
         string jenis; // gawat darurat
+        string gender;
         string kondisi; // kondisi saat pasien tiba
         string date_and_time;
         string anamnesis; // mencakup keluhan dan riwat penyakit
@@ -89,7 +90,7 @@ contract MedicalRecords {
     }
 
     struct PengantarPasien {
-        string pengantar_pasien;
+        string pengantar_pasien; //jenis
         string nama_lengkap;
         uint hp; // nomor hanphone
         string hubungan; // hubungan pengantar dengan pasien
@@ -97,9 +98,9 @@ contract MedicalRecords {
 
     mapping(address => IdentitasPasien) private patientId;
     mapping(address => PengantarPasien) private pengantar_pasien;
-    mapping(address => RawatJalan) private outPatient;
-    mapping(address => RawatInap) private inPatient;
-    mapping(address => GawatDarurat) private emergencyPatient;
+    mapping(address => RawatJalan[]) private outPatient;
+    mapping(address => RawatInap[]) private inPatient;
+    mapping(address => GawatDarurat[]) private emergencyPatient;
 
     address private admin; 
     DoctorVerificator doctor_verificator;
@@ -144,7 +145,7 @@ contract MedicalRecords {
         rawatJalan.pelayanan = _rawatjalan.pelayanan;
         rawatJalan.agreement = _rawatjalan.agreement;
 
-        outPatient[_identitasPasien.patientAddress] = rawatJalan;
+        outPatient[_identitasPasien.patientAddress].push(rawatJalan);
 
         patient_verificator.addPatient(_identitasPasien.patientAddress);
         doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.patientAddress);
@@ -176,7 +177,7 @@ contract MedicalRecords {
         rawatInap.doctor = _rawatInap.doctor;
         rawatInap.pelayanan = _rawatInap.pelayanan;
 
-        inPatient[_rawatInap.patient_address] = rawatInap;
+        inPatient[_rawatInap.patient_address].push(rawatInap);
 
         patient_verificator.addPatient(_identitasPasien.patientAddress);
         doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.patientAddress);
@@ -193,6 +194,7 @@ contract MedicalRecords {
 
         GawatDarurat memory gawatDarurat;
         gawatDarurat.patient_address = _gawatDarurat.patient_address;
+        gawatDarurat.gender = _gawatDarurat.gender;
         gawatDarurat.jenis = _gawatDarurat.jenis;
         gawatDarurat.kondisi = _gawatDarurat.kondisi;
         gawatDarurat.date_and_time = _gawatDarurat.date_and_time;
@@ -204,21 +206,21 @@ contract MedicalRecords {
         gawatDarurat.lc = _gawatDarurat.lc;
         gawatDarurat.transport = _gawatDarurat.transport;
 
-        emergencyPatient[_gawatDarurat.patient_address] = gawatDarurat;
+        emergencyPatient[_gawatDarurat.patient_address].push(gawatDarurat);
 
         patient_verificator.addPatient(_gawatDarurat.patient_address);
         doctor_relation.addDoctorRelation(msg.sender, _gawatDarurat.patient_address);
     }
 
-    function getOutPatient(address add) public view returns(IdentitasPasien memory a, RawatJalan memory b) {
+    function getOutPatient(address add) public view returns(IdentitasPasien memory a, RawatJalan[] memory b) {
         return (patientId[add], outPatient[add]);
     }
 
-    function getInPatient(address add) public view returns(IdentitasPasien memory a, RawatInap memory b) {
+    function getInPatient(address add) public view returns(IdentitasPasien memory a, RawatInap[] memory b) {
         return (patientId[add], inPatient[add]);
     }
 
-    function getEmergencyPatient(address add) public view returns(IdentitasPasien memory a, GawatDarurat memory b) {
+    function getEmergencyPatient(address add) public view returns(IdentitasPasien memory a, GawatDarurat[] memory b) {
         return (patientId[add], emergencyPatient[add]);
     }
 
