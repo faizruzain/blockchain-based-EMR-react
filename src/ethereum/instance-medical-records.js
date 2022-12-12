@@ -3,9 +3,9 @@ import MedicalRecords from "./build/MedicalRecords.json";
 
 const instance = new web3.eth.Contract(
   MedicalRecords.abi,
-  "0x5B2591977e3d829449d6352F32c134517731890D"
+  "0xB15C61e9847C3A6DD1396dB157c2c2a340b65f60"
 );
 
 export default instance;
 
-// ContractDeployer 0x7c09f9ec170834413b43134BB408eF24CBBa6be5
+// ContractDeployer 0xb53cC7F3dFCea1F775624cDE1a2152f44e9c95Aa
