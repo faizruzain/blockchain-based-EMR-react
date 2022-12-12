@@ -14,7 +14,7 @@ contract ContractDeployer {
         admin = msg.sender;
 
         address patient = address(new MedicalRecords(msg.sender));
-        bunchOfContractAddress["secret"].push(ContractAddress("patient", patient));
+        bunchOfContractAddress["secret"].push(ContractAddress("electronicMedicalRecords", patient));
 
         address patientVerificator = address(new PatientVerificator(msg.sender));
         bunchOfContractAddress["secret"].push(ContractAddress("patientVerificator", patientVerificator));

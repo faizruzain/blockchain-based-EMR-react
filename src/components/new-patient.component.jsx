@@ -3,6 +3,8 @@ import { Form, Transition } from "semantic-ui-react";
 import RawatJalan from "./rawat-jalan.component";
 import RawatInap from "./rawat-inap.component";
 import GawatDarurat from "./gawat-darurat.component";
+import instance from "../ethereum/instance-medical-records";
+import web3 from "../ethereum/web3";
 
 const jenis = [
   { key: "a", text: "Rawat Jalan", value: "rawatJalan" },
@@ -17,7 +19,7 @@ class NewPatient extends Component {
       jenis: "",
       rawatJalan: {
         patientIdRJ: {
-          address: "",
+          p_address: "",
           fullname: "",
           umur: "",
           dob: "",
@@ -32,11 +34,11 @@ class NewPatient extends Component {
         pengobatan: "",
         tindakan: "",
         pelayanan: "",
-        agreement: true,
+        agreement: "true",
       },
       rawatInap: {
         patientIdRI: {
-          address: "",
+          p_address: "",
           fullname: "",
           umur: "",
           dob: "",
@@ -84,10 +86,162 @@ class NewPatient extends Component {
     this.setState({ jenis: e.target.innerText });
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
-    const state = this.state;
-    console.log(state);
+    const d = new Date();
+    const date = d.toLocaleDateString("id-ID", {
+      dateStyle: "medium",
+    });
+    const time = d.toLocaleTimeString("id-ID", {
+      timeStyle: "short",
+    });
+
+    const tanggalMasuk = `${date} ${time}`;
+
+    const jenis = this.state.jenis;
+    const accounts = await web3.eth.getAccounts();
+
+    if (jenis === "Rawat Jalan") {
+      const patientAddress = this.state.rawatJalan.patientIdRJ.p_address;
+      const { p_address, fullname, umur, dob, gender } =
+        this.state.rawatJalan.patientIdRJ;
+      const outPatientDetails = [p_address, fullname, umur, dob, gender];
+      console.log(outPatientDetails);
+      const {
+        jenis,
+        anamnesis,
+        diagnosis,
+        rp,
+        pengobatan,
+        tindakan,
+        pelayanan,
+        agreement,
+      } = this.state.rawatJalan;
+      const outPatientData = [
+        patientAddress,
+        jenis,
+        tanggalMasuk,
+        anamnesis,
+        diagnosis,
+        rp,
+        pengobatan,
+        tindakan,
+        pelayanan,
+        agreement,
+      ];
+      console.log(outPatientData);
+
+      try {
+        await instance.methods
+          .addOutPatient(outPatientDetails, outPatientData)
+          .send({
+            from: accounts[0],
+            gas: "1000000",
+          })
+          .on("receipt", (receipt) => {
+            console.log(receipt);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (jenis === "Rawat Inap") {
+      const patientAddress = this.state.rawatInap.patientIdRI.p_address;
+      const { p_address, fullname, umur, dob, gender } =
+        this.state.rawatInap.patientIdRI;
+      const inPatientDetails = [p_address, fullname, umur, dob, gender];
+      console.log(inPatientDetails);
+      const {
+        jenis,
+        anamnesis,
+        fisik,
+        diagnosis,
+        rp,
+        pengobatan,
+        tindakan,
+        pelayanan,
+        agreement,
+        obs,
+        ds,
+      } = this.state.rawatInap;
+      const inPatientData = [
+        patientAddress,
+        jenis,
+        tanggalMasuk,
+        anamnesis,
+        fisik,
+        diagnosis,
+        rp,
+        pengobatan,
+        tindakan,
+        agreement,
+        obs,
+        ds,
+        accounts[0],
+        pelayanan,
+      ];
+      console.log(inPatientData);
+
+      try {
+        await instance.methods
+          .addInPatient(inPatientDetails, inPatientData)
+          .send({
+            from: accounts[0],
+            gas: "1000000",
+          })
+          .on("receipt", (receipt) => {
+            console.log(receipt);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (jenis === "Emergency") {
+      const address = this.state.gawatDarurat.address;
+      const { pengantarPasien, fullname, hp, hubungan } =
+        this.state.gawatDarurat.pengantar;
+      const emergencyPatientDetails = [pengantarPasien, fullname, hp, hubungan];
+      console.log(emergencyPatientDetails);
+      const {
+        jenis,
+        kondisi,
+        anamnesis,
+        fisik,
+        diagnosis,
+        pengobatan,
+        tindakan,
+        lc,
+        transport,
+        gender,
+      } = this.state.gawatDarurat;
+      const emergencyPatientData = [
+        address,
+        gender,
+        jenis,
+        kondisi,
+        tanggalMasuk,
+        anamnesis,
+        fisik,
+        diagnosis,
+        pengobatan,
+        tindakan,
+        lc,
+        transport,
+      ];
+      console.log(emergencyPatientData);
+
+      try {
+        await instance.methods
+          .addEmergencyPatient(emergencyPatientDetails, emergencyPatientData)
+          .send({
+            from: accounts[0],
+            gas: "1000000",
+          })
+          .on("receipt", (receipt) => {
+            console.log(receipt);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   getTextAreaValue = (e) => {
@@ -125,26 +279,24 @@ class NewPatient extends Component {
     switch (jenis) {
       case "Rawat Jalan":
         const { patientIdRJ } = this.state.rawatJalan;
-        const { rawatJalan } = this.state;
         patientIdRJ[e.target.name] = e.target.value;
-        rawatJalan[e.target.name] = e.target.value;
-        this.setState({ patientIdRJ, rawatJalan });
+        this.setState({ patientIdRJ });
 
         break;
 
       case "Rawat Inap":
         const { patientIdRI } = this.state.rawatInap;
-        const { rawatInap } = this.state;
         patientIdRI[e.target.name] = e.target.value;
-        rawatInap[e.target.name] = e.target.value;
-        this.setState({ patientIdRI, rawatInap });
+        this.setState({ patientIdRI });
 
         break;
 
       case "Emergency":
+        const {gawatDarurat} = this.state;
+        gawatDarurat[e.target.name] = e.target.value;
         const { pengantar } = this.state.gawatDarurat;
         pengantar[e.target.name] = e.target.value;
-        this.setState({ pengantar });
+        this.setState({ pengantar, gawatDarurat });
 
         break;
 
@@ -153,27 +305,27 @@ class NewPatient extends Component {
     }
   };
 
-  getSelectValue = (e, { value }) => {
+  getSelectValue = (e) => {
     const jenis = this.state.jenis;
 
     switch (jenis) {
       case "Rawat Jalan":
         const { patientIdRJ } = this.state.rawatJalan;
-        patientIdRJ[value] = e.target.innerText;
+        patientIdRJ["gender"] = e.target.innerText;
         this.setState({ patientIdRJ });
 
         break;
 
       case "Rawat Inap":
         const { patientIdRI } = this.state.rawatInap;
-        patientIdRI[value] = e.target.innerText;
+        patientIdRI["gender"] = e.target.innerText;
         this.setState({ patientIdRI });
 
         break;
 
       case "Emergency":
         const { gawatDarurat } = this.state;
-        gawatDarurat[value] = e.target.innerText;
+        gawatDarurat["gender"] = e.target.innerText;
         this.setState({ gawatDarurat });
 
         break;

@@ -3,8 +3,8 @@ import { Form } from "semantic-ui-react";
 import FormRawatJalan from "./form-rawat-jalan.component";
 
 const options = [
-  { key: "m", text: "Laki-Laki", value: "gender" },
-  { key: "f", text: "Perempuan", value: "gender" },
+  { key: "m", text: "Laki-Laki", value: "male" },
+  { key: "f", text: "Perempuan", value: "female" },
 ];
 
 const inputs = [
@@ -12,7 +12,7 @@ const inputs = [
     label: "ID Pasien",
     placeholder: "ID Pasien",
     type: "text",
-    name: "address"
+    name: "p_address"
   },
   {
     label: "Nama Lengkap",
