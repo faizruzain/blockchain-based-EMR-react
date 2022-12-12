@@ -68,6 +68,7 @@ class NewPatient extends Component {
         },
         address: "", // new account from wallet
         jenis: "Gawat Darurat",
+        e_fullname: "",
         konsdisi: "",
         tanggalMasuk: "",
         anamnesis: "",
@@ -297,6 +298,8 @@ class NewPatient extends Component {
         const { pengantar } = this.state.gawatDarurat;
         pengantar[e.target.name] = e.target.value;
         this.setState({ pengantar, gawatDarurat });
+        const a = this.state;
+        console.log(a);
 
         break;
 

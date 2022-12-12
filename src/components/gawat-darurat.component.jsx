@@ -1,5 +1,5 @@
 import { Component, Fragment } from "react";
-import { Form } from "semantic-ui-react";
+import { Form, Segment } from "semantic-ui-react";
 import FormGawatDarurat from "./form-gawat-darurat.component";
 
 const options = [
@@ -34,60 +34,65 @@ class GawatDarurat extends Component {
     const { textAreaHandler, inputHandler, selectHandler } = this.props;
     return (
       <Fragment>
-        <h5>Identitas Pengantar Pasien</h5>
-        <Form.Group>
-          {inputs.map((input, index) => {
-            return (
-              <Form.Input
-                key={index}
-                label={input.label}
-                placeholder={input.placeholder}
-                type={input.type}
-                name={input.name}
-                onChange={inputHandler}
-              />
-            );
-          })}
+        <Segment>
+          <h5>Identitas Pengantar Pasien</h5>
+          <Form.Group>
+            {inputs.map((input, index) => {
+              return (
+                <Form.Input
+                  key={index}
+                  label={input.label}
+                  placeholder={input.placeholder}
+                  type={input.type}
+                  name={input.name}
+                  onChange={inputHandler}
+                />
+              );
+            })}
 
-          <Form.Select
-            fluid
-            label="Gender"
-            options={options}
-            title="gender"
-            placeholder="Gender"
-            onChange={selectHandler}
-          />
-        </Form.Group>
+            <Form.Select
+              fluid
+              label="Gender"
+              options={options}
+              title="gender"
+              placeholder="Gender"
+              onChange={selectHandler}
+            />
+          </Form.Group>
+        </Segment>
 
-        <Form.Group>
-        <Form.Input
-                key="p"
-                label="ID Pasien"
-                placeholder="ID Pasien"
-                type="text"
-                name="address"
-                onChange={inputHandler}
-              />
+        <Segment>
+          <Form.Group>
+            <Form.Input
+              key="p"
+              label="ID Pasien"
+              placeholder="ID Pasien"
+              type="text"
+              name="address"
+              onChange={inputHandler}
+            />
 
-          <Form.Select
-            fluid
-            label="Jenis Kelamin Pasien"
-            options={options}
-            title="gender"
-            placeholder="Jenis Kelamin Pasien"
-            onChange={selectHandler}
-          />
+            <Form.Input
+              key="q"
+              label="Nama Lengkap"
+              placeholder="Nama Lengkap"
+              type="text"
+              name="e_fullname"
+              onChange={inputHandler}
+            />
 
-          <Form.Input
-            type="date"
-            label="Tanggal Masuk"
-            placeholder="Tanggal Masuk"
-            name="tanggalMasuk"
-            onChange={inputHandler}
-          />
-        </Form.Group>
+            <Form.Select
+              fluid
+              label="Jenis Kelamin Pasien"
+              options={options}
+              title="gender"
+              placeholder="Jenis Kelamin Pasien"
+              onChange={selectHandler}
+            />
+          </Form.Group>
 
-        <FormGawatDarurat textAreaHandler={textAreaHandler} />
+          <FormGawatDarurat textAreaHandler={textAreaHandler} />
+        </Segment>
       </Fragment>
     );
   }
