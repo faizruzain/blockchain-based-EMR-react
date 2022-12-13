@@ -5,7 +5,7 @@ import doctorRelatioInstance from "../ethereum/instance-doctor-relations";
 import web3 from "../ethereum/web3";
 
 class PtientsList extends Component {
-  state = {lists: []};
+  state = { lists: [] };
 
   async componentDidMount() {
     try {
@@ -14,14 +14,17 @@ class PtientsList extends Component {
         .getDoctorRelations(accounts[0])
         .call({ from: accounts[0] });
 
-      let a = [];
+      const arr = [];
 
-      for (const key in data) {
-        a.push(data[key])
+      let a = 0;
+      for (let i = 0; i < data.length; i++) {
+        const obj = {};
+        obj.name = data[i][a];
+        obj.jenis = data[i][a + 1];
+        obj.add = data[i][a + 2];
+        arr.push(obj);
       }
-
-      this.setState({lists: a})
-
+      this.setState({ lists: arr });
     } catch (error) {
       console.log(error);
     }
@@ -35,52 +38,15 @@ class PtientsList extends Component {
           return (
             <Card key={index}>
               <Card.Content>
-                <Card.Header>Matthew Harris</Card.Header>
-                <Card.Meta>Co-Worker</Card.Meta>
+                <Card.Header>{list.name}</Card.Header>
+                <Card.Meta>{list.jenis}</Card.Meta>
                 <Card.Description>
-                  <Link to={`/doctor/patient-details/${list}`}>{list}</Link>
+                  <Link to={`/doctor/patient-details/${list.add}`}>{list.add}</Link>
                 </Card.Description>
               </Card.Content>
             </Card>
           );
         })}
-        {/* <Card>
-          <Card.Content>
-            <Card.Header>Matthew Harris</Card.Header>
-            <Card.Meta>Co-Worker</Card.Meta>
-            <Card.Description>
-              <Link
-                to={
-                  "/doctor/patient-details/0x4406dEA588d4E4e19312FA913011fF9697ac84b2"
-                }
-              >
-                0x4406dEA588d4E4e19312FA913011fF9697ac84b2
-              </Link>
-            </Card.Description>
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content>
-            <Card.Header content="Jake Smith" />
-            <Card.Meta content="Musicians" />
-            <Card.Description content="0x51C9A0d9ed79B064e3106dAeF523Def390D887b6" />
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content
-            header="Elliot Baker"
-            meta="Friend"
-            description="0x152d03E43ccc752A270c474eD778a7A7c82e0243"
-          />
-        </Card>
-
-        <Card
-          header="Jenny Hess"
-          meta="Friend"
-          description="0xCFF8961C5C739Dec2C08A4Bb3632E83AE45e8FEA"
-        /> */}
       </Card.Group>
     );
   }
