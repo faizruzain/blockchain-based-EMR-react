@@ -148,7 +148,7 @@ contract MedicalRecords {
         outPatient[_identitasPasien.patientAddress].push(rawatJalan);
 
         patient_verificator.addPatient(_identitasPasien.patientAddress);
-        doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.nama_lengkap, _identitasPasien.patientAddress);
+        doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.nama_lengkap, _rawatjalan.jenis, _identitasPasien.patientAddress);
     }
 
     function addInPatient(IdentitasPasien memory _identitasPasien, RawatInap memory _rawatInap) onlyDoctor public {
@@ -180,7 +180,7 @@ contract MedicalRecords {
         inPatient[_rawatInap.patient_address].push(rawatInap);
 
         patient_verificator.addPatient(_identitasPasien.patientAddress);
-        doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.nama_lengkap, _identitasPasien.patientAddress);
+        doctor_relation.addDoctorRelation(msg.sender, _identitasPasien.nama_lengkap, _rawatInap.jenis, _identitasPasien.patientAddress);
     }
 
     function addEmergencyPatient(PengantarPasien memory _pengantar, GawatDarurat memory _gawatDarurat) onlyDoctor public {
@@ -210,7 +210,7 @@ contract MedicalRecords {
         emergencyPatient[_gawatDarurat.patient_address].push(gawatDarurat);
 
         patient_verificator.addPatient(_gawatDarurat.patient_address);
-        doctor_relation.addDoctorRelation(msg.sender, _gawatDarurat.nama_lengkap, _gawatDarurat.patient_address);
+        doctor_relation.addDoctorRelation(msg.sender, _gawatDarurat.nama_lengkap, _gawatDarurat.jenis, _gawatDarurat.patient_address);
     }
 
     function getOutPatient(address add) public view returns(IdentitasPasien memory a, RawatJalan[] memory b) {
@@ -311,6 +311,7 @@ contract DoctorRelation {
 
     struct Patient {
         string name;
+        string jenis;
         address add;
     }
 
@@ -327,9 +328,10 @@ contract DoctorRelation {
         doctor_verificator = DoctorVerificator(_DoctorVerificatorAddress);
     }
 
-    function addDoctorRelation(address _doctor, string memory _fullname, address _add) onlyDoctor(_doctor) public {
+    function addDoctorRelation(address _doctor, string memory _fullname, string memory _jenis, address _add) onlyDoctor(_doctor) public {
         Patient memory patient;
         patient.name = _fullname;
+        patient.jenis = _jenis;
         patient.add = _add;
         relatedPatien[_doctor].push(patient);
     }

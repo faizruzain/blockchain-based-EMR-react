@@ -3,7 +3,7 @@ import { Form, Transition } from "semantic-ui-react";
 import RawatJalan from "./rawat-jalan.component";
 import RawatInap from "./rawat-inap.component";
 import GawatDarurat from "./gawat-darurat.component";
-import instance from "../ethereum/instance-medical-records";
+import medicalRecordsinstance from "../ethereum/instance-medical-records";
 import web3 from "../ethereum/web3";
 
 const jenis = [
@@ -133,11 +133,11 @@ class NewPatient extends Component {
       console.log(outPatientData);
 
       try {
-        await instance.methods
+        await medicalRecordsinstance.methods
           .addOutPatient(outPatientDetails, outPatientData)
           .send({
             from: accounts[0],
-            gas: "1000000",
+            gas: "6000000",
           })
           .on("receipt", (receipt) => {
             console.log(receipt);
@@ -183,11 +183,11 @@ class NewPatient extends Component {
       console.log(inPatientData);
 
       try {
-        await instance.methods
+        await medicalRecordsinstance.methods
           .addInPatient(inPatientDetails, inPatientData)
           .send({
             from: accounts[0],
-            gas: "1000000",
+            gas: "6000000",
           })
           .on("receipt", (receipt) => {
             console.log(receipt);
@@ -204,6 +204,7 @@ class NewPatient extends Component {
       const {
         jenis,
         kondisi,
+        e_fullname,
         anamnesis,
         fisik,
         diagnosis,
@@ -215,8 +216,9 @@ class NewPatient extends Component {
       } = this.state.gawatDarurat;
       const emergencyPatientData = [
         address,
-        gender,
         jenis,
+        e_fullname,
+        gender,
         kondisi,
         tanggalMasuk,
         anamnesis,
@@ -230,11 +232,11 @@ class NewPatient extends Component {
       console.log(emergencyPatientData);
 
       try {
-        await instance.methods
+        await medicalRecordsinstance.methods
           .addEmergencyPatient(emergencyPatientDetails, emergencyPatientData)
           .send({
             from: accounts[0],
-            gas: "1000000",
+            gas: "6000000",
           })
           .on("receipt", (receipt) => {
             console.log(receipt);

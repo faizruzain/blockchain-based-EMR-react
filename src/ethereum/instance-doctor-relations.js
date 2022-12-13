@@ -3,9 +3,9 @@ import DoctorRelation from "./build/DoctorRelation.json";
 
 const doctorRelatioInstance = new web3.eth.Contract(
   DoctorRelation.abi,
-  "0xb322EfeBcfAE4f533A779Ca107F46383CeeA76E7"
+  "0x4Dee93F0D99075c76a5EcFd3Db08be94d325B4f4"
 );
 
 export default doctorRelatioInstance;
 
-// ContractDeployer 0xb53cC7F3dFCea1F775624cDE1a2152f44e9c95Aa
+// ContractDeployer 0xC470B8f99E201c60A14e877DcdDF5c889E1FAF2D
