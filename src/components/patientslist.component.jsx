@@ -41,7 +41,7 @@ class PtientsList extends Component {
                 <Card.Header>{list.name}</Card.Header>
                 <Card.Meta>{list.jenis}</Card.Meta>
                 <Card.Description>
-                  <Link to={`/doctor/patient-details/${list.add}`}>{list.add}</Link>
+                  <Link to={`/doctor/patient-details/${list.jenis.replace(" ", "-")}/${list.add}`}>{list.add}</Link>
                 </Card.Description>
               </Card.Content>
             </Card>

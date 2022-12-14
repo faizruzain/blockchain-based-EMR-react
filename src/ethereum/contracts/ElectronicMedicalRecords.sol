@@ -90,6 +90,7 @@ contract MedicalRecords {
     }
 
     struct PengantarPasien {
+        address add; // yang diantar
         string pengantar_pasien; //jenis
         string nama_lengkap;
         uint hp; // nomor hanphone
@@ -185,6 +186,7 @@ contract MedicalRecords {
 
     function addEmergencyPatient(PengantarPasien memory _pengantar, GawatDarurat memory _gawatDarurat) onlyDoctor public {
         PengantarPasien memory pengantarPasien;
+        pengantarPasien.add = _pengantar.add; // yang diantar
         pengantarPasien.pengantar_pasien = _pengantar.pengantar_pasien;
         pengantarPasien.nama_lengkap = _pengantar.nama_lengkap;
         pengantarPasien.hp = _pengantar.hp;
@@ -213,16 +215,16 @@ contract MedicalRecords {
         doctor_relation.addDoctorRelation(msg.sender, _gawatDarurat.nama_lengkap, _gawatDarurat.jenis, _gawatDarurat.patient_address);
     }
 
-    function getOutPatient(address add) public view returns(IdentitasPasien memory a, RawatJalan[] memory b) {
+    function getOutPatient(address add) onlyDoctor public view returns(IdentitasPasien memory a, RawatJalan[] memory b) {
         return (patientId[add], outPatient[add]);
     }
 
-    function getInPatient(address add) public view returns(IdentitasPasien memory a, RawatInap[] memory b) {
+    function getInPatient(address add) onlyDoctor public view returns(IdentitasPasien memory a, RawatInap[] memory b) {
         return (patientId[add], inPatient[add]);
     }
 
-    function getEmergencyPatient(address add) public view returns(IdentitasPasien memory a, GawatDarurat[] memory b) {
-        return (patientId[add], emergencyPatient[add]);
+    function getEmergencyPatient(address add) onlyDoctor public view returns(PengantarPasien memory a, GawatDarurat[] memory b) {
+        return (pengantar_pasien[add], emergencyPatient[add]);
     }
 
     modifier onlyDoctor() {

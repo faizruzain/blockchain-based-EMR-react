@@ -17,7 +17,7 @@ class App extends Component {
           <Route path="/doctor" element={<Header />}>
             <Route path="/doctor" element={<MyMenu />} />
             <Route
-              path="/doctor/patient-details/:address"
+              path="/doctor/patient-details/:jenis/:address"
               element={<PatientDetails />}
             />
           </Route>
