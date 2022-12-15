@@ -199,7 +199,7 @@ class NewPatient extends Component {
       const address = this.state.gawatDarurat.address;
       const { pengantarPasien, fullname, hp, hubungan } =
         this.state.gawatDarurat.pengantar;
-      const emergencyPatientDetails = [pengantarPasien, fullname, hp, hubungan];
+      const emergencyPatientDetails = [address, pengantarPasien, fullname, hp, hubungan];
       console.log(emergencyPatientDetails);
       const {
         jenis,
