@@ -49,15 +49,6 @@ class GawatDarurat extends Component {
                 />
               );
             })}
-
-            <Form.Select
-              fluid
-              label="Gender"
-              options={options}
-              title="gender"
-              placeholder="Gender"
-              onChange={selectHandler}
-            />
           </Form.Group>
         </Segment>
 

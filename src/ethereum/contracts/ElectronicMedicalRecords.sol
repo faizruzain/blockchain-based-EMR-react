@@ -47,10 +47,10 @@ contract MedicalRecords {
         string jenis; // rawat jalan
         string date_and_time;
         string anamnesis; // mencakup keluhan dan riwat penyakit
+        string fisik;
         string diagnosis;
         string rp; // rencana penatalaksanaan
-        string pengobatan;
-        string tindakan;
+        string pengobatanDanTindakan; // pengobatan dan atau tindakan
         string pelayanan; // pelayanan lain yang telah diberikan kepada pasien
         bool agreement; // persetujuan tindakan bila diperlukan
     }
@@ -63,8 +63,7 @@ contract MedicalRecords {
         string fisik; // hasil pemeriksaan fisik dan penunjang medik
         string diagnosis;
         string rp; // rencana penatalaksanaan
-        string pengobatan;
-        string tindakan;
+        string pengobatanDanTindakan; // pengobatan dan atau tindakan
         bool agreement; // persetujuan tindakan bila diperlukan
         string obs; // catatan hasil observasi klinis dan hasil pengobatan
         string ds; // discharge summary / ringkasan pulang
@@ -82,10 +81,11 @@ contract MedicalRecords {
         string anamnesis; // mencakup keluhan dan riwat penyakit
         string fisik; // hasil pemeriksaan fisik dan penunjang medik
         string diagnosis;
-        string pengobatan;
-        string tindakan;
+        string pengobatanDanTindakan; // pengobatan dan atau tindakan
         string lc; // ringkasan kondisi pasien sebelum meninggalkan pelayanan unit gawat darurat dan rencana tindak lanjut
+        address doctor;
         string transport; // sarana transportasi yang digunakan bagi pasien yang akan dipindahkan ke saran pelayanan kesehatan lain
+        string pelayanan;
 
     }
 
@@ -139,10 +139,10 @@ contract MedicalRecords {
         rawatJalan.jenis = _rawatjalan.jenis;
         rawatJalan.date_and_time = _rawatjalan.date_and_time;
         rawatJalan.anamnesis = _rawatjalan.anamnesis;
+        rawatJalan.fisik = _rawatjalan.fisik;
         rawatJalan.diagnosis = _rawatjalan.diagnosis;
         rawatJalan.rp = _rawatjalan.rp;
-        rawatJalan.pengobatan = _rawatjalan.pengobatan;
-        rawatJalan.tindakan = _rawatjalan.tindakan;
+        rawatJalan.pengobatanDanTindakan = _rawatjalan.pengobatanDanTindakan;
         rawatJalan.pelayanan = _rawatjalan.pelayanan;
         rawatJalan.agreement = _rawatjalan.agreement;
 
@@ -170,8 +170,7 @@ contract MedicalRecords {
         rawatInap.fisik = _rawatInap.fisik; 
         rawatInap.diagnosis = _rawatInap.diagnosis;
         rawatInap.rp = _rawatInap.rp; 
-        rawatInap.pengobatan = _rawatInap.pengobatan;
-        rawatInap.tindakan = _rawatInap.tindakan;
+        rawatInap.pengobatanDanTindakan = _rawatInap.pengobatanDanTindakan;
         rawatInap.agreement = _rawatInap.agreement;
         rawatInap.obs = _rawatInap.obs;
         rawatInap.ds = _rawatInap.ds;
@@ -196,18 +195,19 @@ contract MedicalRecords {
 
         GawatDarurat memory gawatDarurat;
         gawatDarurat.patient_address = _gawatDarurat.patient_address;
+        gawatDarurat.jenis = _gawatDarurat.jenis;
         gawatDarurat.nama_lengkap = _gawatDarurat.nama_lengkap;
         gawatDarurat.gender = _gawatDarurat.gender;
-        gawatDarurat.jenis = _gawatDarurat.jenis;
         gawatDarurat.kondisi = _gawatDarurat.kondisi;
         gawatDarurat.date_and_time = _gawatDarurat.date_and_time;
         gawatDarurat.anamnesis = _gawatDarurat.anamnesis;
         gawatDarurat.fisik = _gawatDarurat.fisik;
         gawatDarurat.diagnosis = _gawatDarurat.diagnosis;
-        gawatDarurat.pengobatan = _gawatDarurat.pengobatan;
-        gawatDarurat.tindakan = _gawatDarurat.tindakan;
+        gawatDarurat.pengobatanDanTindakan = _gawatDarurat.pengobatanDanTindakan;
         gawatDarurat.lc = _gawatDarurat.lc;
+        gawatDarurat.doctor = _gawatDarurat.doctor;
         gawatDarurat.transport = _gawatDarurat.transport;
+        gawatDarurat.pelayanan = _gawatDarurat.pelayanan;
 
         emergencyPatient[_gawatDarurat.patient_address].push(gawatDarurat);
 

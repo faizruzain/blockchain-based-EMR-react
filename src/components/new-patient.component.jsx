@@ -16,6 +16,7 @@ class NewPatient extends Component {
   constructor() {
     super();
     this.state = {
+      loading: false,
       jenis: "",
       rawatJalan: {
         patientIdRJ: {
@@ -29,10 +30,10 @@ class NewPatient extends Component {
         jenis: "Rawat Jalan",
         tanggalMasuk: "",
         anamnesis: "",
+        fisik: "",
         diagnosis: "",
         rp: "",
-        pengobatan: "",
-        tindakan: "",
+        pengobatanDanTindakan: "",
         pelayanan: "",
         agreement: "true",
       },
@@ -51,8 +52,7 @@ class NewPatient extends Component {
         fisik: "",
         diagnosis: "",
         rp: "",
-        pengobatan: "",
-        tindakan: "",
+        pengobatanDanTindakan: "",
         agreement: true,
         observasi: "",
         ds: "",
@@ -69,16 +69,17 @@ class NewPatient extends Component {
         address: "", // new account from wallet
         jenis: "Gawat Darurat",
         e_fullname: "",
+        gender: "",
         konsdisi: "",
         tanggalMasuk: "",
         anamnesis: "",
         fisik: "",
         diagnosis: "",
-        pengobatan: "",
-        tindakan: "",
+        pengobatanDanTindakan: "",
         lc: "",
+        doctor: "",
         transport: "",
-        gender: "",
+        pelayanan: ""
       },
     };
   }
@@ -89,6 +90,7 @@ class NewPatient extends Component {
 
   onSubmit = async (e) => {
     e.preventDefault();
+    this.setState({ loading: true });
     const d = new Date();
     const date = d.toLocaleDateString("id-ID", {
       dateStyle: "medium",
@@ -111,10 +113,10 @@ class NewPatient extends Component {
       const {
         jenis,
         anamnesis,
+        fisik,
         diagnosis,
         rp,
-        pengobatan,
-        tindakan,
+        pengobatanDanTindakan,
         pelayanan,
         agreement,
       } = this.state.rawatJalan;
@@ -123,10 +125,10 @@ class NewPatient extends Component {
         jenis,
         tanggalMasuk,
         anamnesis,
+        fisik,
         diagnosis,
         rp,
-        pengobatan,
-        tindakan,
+        pengobatanDanTindakan,
         pelayanan,
         agreement,
       ];
@@ -141,9 +143,11 @@ class NewPatient extends Component {
           })
           .on("receipt", (receipt) => {
             console.log(receipt);
+            this.setState({ loading: false });
           });
       } catch (e) {
         console.log(e);
+        this.setState({ loading: false });
       }
     } else if (jenis === "Rawat Inap") {
       const patientAddress = this.state.rawatInap.patientIdRI.p_address;
@@ -157,8 +161,7 @@ class NewPatient extends Component {
         fisik,
         diagnosis,
         rp,
-        pengobatan,
-        tindakan,
+        pengobatanDanTindakan,
         pelayanan,
         agreement,
         obs,
@@ -172,8 +175,7 @@ class NewPatient extends Component {
         fisik,
         diagnosis,
         rp,
-        pengobatan,
-        tindakan,
+        pengobatanDanTindakan,
         agreement,
         obs,
         ds,
@@ -191,15 +193,23 @@ class NewPatient extends Component {
           })
           .on("receipt", (receipt) => {
             console.log(receipt);
+            this.setState({ loading: false });
           });
       } catch (e) {
         console.log(e);
+        this.setState({ loading: false });
       }
     } else if (jenis === "Emergency") {
       const address = this.state.gawatDarurat.address;
       const { pengantarPasien, fullname, hp, hubungan } =
         this.state.gawatDarurat.pengantar;
-      const emergencyPatientDetails = [address, pengantarPasien, fullname, hp, hubungan];
+      const emergencyPatientDetails = [
+        address,
+        pengantarPasien,
+        fullname,
+        hp,
+        hubungan,
+      ];
       console.log(emergencyPatientDetails);
       const {
         jenis,
@@ -208,11 +218,11 @@ class NewPatient extends Component {
         anamnesis,
         fisik,
         diagnosis,
-        pengobatan,
-        tindakan,
+        pengobatanDanTindakan,
         lc,
         transport,
         gender,
+        pelayanan
       } = this.state.gawatDarurat;
       const emergencyPatientData = [
         address,
@@ -224,10 +234,11 @@ class NewPatient extends Component {
         anamnesis,
         fisik,
         diagnosis,
-        pengobatan,
-        tindakan,
+        pengobatanDanTindakan,
         lc,
+        accounts[0],
         transport,
+        pelayanan
       ];
       console.log(emergencyPatientData);
 
@@ -240,9 +251,11 @@ class NewPatient extends Component {
           })
           .on("receipt", (receipt) => {
             console.log(receipt);
+            this.setState({ loading: false });
           });
       } catch (e) {
         console.log(e);
+        this.setState({ loading: false });
       }
     }
   };
@@ -254,6 +267,7 @@ class NewPatient extends Component {
         const { rawatJalan } = this.state;
         rawatJalan[e.target.name] = e.target.value;
         this.setState({ rawatJalan });
+        
 
         break;
 
@@ -261,6 +275,8 @@ class NewPatient extends Component {
         const { rawatInap } = this.state;
         rawatInap[e.target.name] = e.target.value;
         this.setState({ rawatInap });
+        
+        
 
         break;
 
@@ -268,6 +284,8 @@ class NewPatient extends Component {
         const { gawatDarurat } = this.state;
         gawatDarurat[e.target.name] = e.target.value;
         this.setState({ gawatDarurat });
+        const a = this.state
+        console.log(a)
 
         break;
 
@@ -285,23 +303,26 @@ class NewPatient extends Component {
         patientIdRJ[e.target.name] = e.target.value;
         this.setState({ patientIdRJ });
 
+        
+
         break;
 
       case "Rawat Inap":
         const { patientIdRI } = this.state.rawatInap;
         patientIdRI[e.target.name] = e.target.value;
         this.setState({ patientIdRI });
+        
 
         break;
 
       case "Emergency":
-        const {gawatDarurat} = this.state;
+        const { gawatDarurat } = this.state;
         gawatDarurat[e.target.name] = e.target.value;
         const { pengantar } = this.state.gawatDarurat;
         pengantar[e.target.name] = e.target.value;
         this.setState({ pengantar, gawatDarurat });
-        const a = this.state;
-        console.log(a);
+        const a = this.state
+        console.log(a)
 
         break;
 
@@ -318,6 +339,7 @@ class NewPatient extends Component {
         const { patientIdRJ } = this.state.rawatJalan;
         patientIdRJ["gender"] = e.target.innerText;
         this.setState({ patientIdRJ });
+        
 
         break;
 
@@ -326,12 +348,15 @@ class NewPatient extends Component {
         patientIdRI["gender"] = e.target.innerText;
         this.setState({ patientIdRI });
 
+
         break;
 
       case "Emergency":
         const { gawatDarurat } = this.state;
         gawatDarurat["gender"] = e.target.innerText;
         this.setState({ gawatDarurat });
+        const a = this.state
+        console.log(a)
 
         break;
 
@@ -341,6 +366,7 @@ class NewPatient extends Component {
   };
 
   render() {
+    const { loading } = this.state;
     const renderJenis = () => {
       const jenis = this.state.jenis;
       if (jenis === "Rawat Jalan") {
@@ -371,7 +397,7 @@ class NewPatient extends Component {
     };
 
     return (
-      <Form onSubmit={this.onSubmit} widths="equal">
+      <Form loading={loading} onSubmit={this.onSubmit} widths="equal">
         <Form.Group>
           <Form.Select
             fluid

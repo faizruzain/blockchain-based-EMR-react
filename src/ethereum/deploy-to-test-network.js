@@ -2,7 +2,7 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("web3");
 const mnemonicPhrase =
-  "hawk pair net flash already meat vanish angle width enrich imitate genuine";
+  "alley panther manual skull pool gloom tank walk scrap home biology pass";
 
 let provider = new HDWalletProvider({
   mnemonic: {

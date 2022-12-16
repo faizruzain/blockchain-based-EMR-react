@@ -1,18 +1,41 @@
 import { Component, Fragment } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { Form, Grid, Button } from "semantic-ui-react";
+import { Grid, Button } from "semantic-ui-react";
 
 const texts = [
-  { text: "Anamnesis", name: "anamnesis" },
-  { text: "Fisik", name: "fisik" },
-  { text: "Diagnosis", name: "diagnosis" },
-  { text: "Rencana Penatalaksanaan", name: "rp" },
-  { text: "Pengobatan", name: "pengobatan" },
-  { text: "Tindakan", name: "tindakan" },
-  { text: "Pelayanan", name: "pelayanan" },
-  { text: "Hasil Observasi", name: "obs" },
-  { text: "Ringkasan Pulang", name: "ds" },
-  { text: "Pelayanan", name: "pelayanan" },
+  {
+    text: "Anamnesis",
+    name: "anamnesis",
+    placeholder: "Mencakup sekurang-kurangnya keluhan dan riwat penyakit",
+  },
+  {
+    text: "Fisik",
+    name: "fisik",
+    placeholder: "Hasil pemeriksaan fisik dan penunjang medik",
+  },
+  { text: "Diagnosis", name: "diagnosis", placeholder: "Diagnosis dokter" },
+  {
+    text: "Rencana Penatalaksanaan",
+    name: "rp",
+    placeholder: "Rencana Penatalaksanaan",
+  },
+  {
+    text: "Pengobatan dan Tindakan",
+    name: "pengobatanDanTindakan",
+    placeholder: "Pengobatan dan Tindakan",
+  },
+
+  {
+    text: "Hasil Observasi",
+    name: "obs",
+    placeholder: "Catatan observasi klinis dan hasil pengobatan",
+  },
+  { text: "Ringkasan Pulang", name: "ds", placeholder: "Ringkasan pulang" },
+  {
+    text: "Pelayanan",
+    name: "pelayanan",
+    placeholder: "Pelayanan lain yang telah diberikan kepada pasien",
+  },
 ];
 
 class FormRawatInap extends Component {
@@ -27,7 +50,11 @@ class FormRawatInap extends Component {
               return (
                 <Grid.Column key={index}>
                   <label>{text.text}</label>
-                  <TextareaAutosize name={text.name} onChange={textAreaHandler} />
+                  <TextareaAutosize
+                    placeholder={text.placeholder}
+                    name={text.name}
+                    onChange={textAreaHandler}
+                  />
                 </Grid.Column>
               );
             })}
