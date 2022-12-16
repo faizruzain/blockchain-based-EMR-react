@@ -1,8 +1,6 @@
 // deployment code here
-// const ganache = require("ganache");
 const Web3 = require("web3");
 const web3 = new Web3("http://127.0.0.1:8545");
-// const web3 = new Web3(ganache.provider());
 
 const compiled_Contract_Deployer = require("./build/ContractDeployer.json");
 const compiled_Doctor_Relation = require("./build/DoctorRelation.json");
@@ -12,7 +10,8 @@ const compiled_Medical_Records = require("./build/MedicalRecords.json");
 async function deploy() {
   const [admin, doctor] = await web3.eth.getAccounts();
   const CA = {};
-  console.log(admin, "\n", doctor);
+  console.log(admin);
+  console.log(doctor);
 
   try {
     const contractDeployer = await new web3.eth.Contract(
@@ -37,35 +36,35 @@ async function deploy() {
         gas: "6000000",
       })
       .then((contractAddresses) => {
-        CA.electronicMedicalRecords = contractAddresses[0]["contractAddress"];
-        CA.patientVerificator = contractAddresses[1]["contractAddress"];
-        CA.doctorVerificator = contractAddresses[2]["contractAddress"];
-        CA.doctorRelation = contractAddresses[3]["contractAddress"];
+        CA.MedicalRecords = contractAddresses[0]["contractAddress"];
+        CA.PatientVerificator = contractAddresses[1]["contractAddress"];
+        CA.DoctorVerificator = contractAddresses[2]["contractAddress"];
+        CA.DoctorRelation = contractAddresses[3]["contractAddress"];
       });
 
     console.log(CA);
 
-    const electronicMedicalRecords = await new web3.eth.Contract(
+    const medicalRecords = await new web3.eth.Contract(
       compiled_Medical_Records.abi,
-      CA.electronicMedicalRecords
+      CA.MedicalRecords
     );
 
-    await electronicMedicalRecords.methods
-      .setDoctorVerificatorAddress(CA.doctorVerificator)
+    await medicalRecords.methods
+      .setDoctorVerificatorAddress(CA.DoctorVerificator)
       .send({
         from: admin,
         gas: "6000000",
       });
 
-    await electronicMedicalRecords.methods
-      .setPatientVerificatorAddress(CA.patientVerificator)
+    await medicalRecords.methods
+      .setPatientVerificatorAddress(CA.PatientVerificator)
       .send({
         from: admin,
         gas: "6000000",
       });
 
-    await electronicMedicalRecords.methods
-      .setDoctorRelationAddress(CA.doctorRelation)
+    await medicalRecords.methods
+      .setDoctorRelationAddress(CA.DoctorRelation)
       .send({
         from: admin,
         gas: "6000000",
@@ -73,11 +72,11 @@ async function deploy() {
 
     const doctorRelation = await new web3.eth.Contract(
       compiled_Doctor_Relation.abi,
-      CA.doctorRelation
+      CA.DoctorRelation
     );
 
     await doctorRelation.methods
-      .setDoctorVerificatorAddress(CA.doctorVerificator)
+      .setDoctorVerificatorAddress(CA.DoctorVerificator)
       .send({
         from: admin,
         gas: "6000000",
@@ -85,7 +84,7 @@ async function deploy() {
 
     const doctorVerificator = await new web3.eth.Contract(
       compiled_Doctor_Verificator.abi,
-      CA.doctorVerificator
+      CA.DoctorVerificator
     );
 
     await doctorVerificator.methods.addDoctor(doctor).send({

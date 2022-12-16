@@ -14,16 +14,16 @@ contract ContractDeployer {
         admin = msg.sender;
 
         address patient = address(new MedicalRecords(msg.sender));
-        bunchOfContractAddress["secret"].push(ContractAddress("electronicMedicalRecords", patient));
+        bunchOfContractAddress["secret"].push(ContractAddress("MedicalRecords", patient));
 
         address patientVerificator = address(new PatientVerificator(msg.sender));
-        bunchOfContractAddress["secret"].push(ContractAddress("patientVerificator", patientVerificator));
+        bunchOfContractAddress["secret"].push(ContractAddress("PatientVerificator", patientVerificator));
 
         address doctorVerificator = address(new DoctorVerificator(msg.sender));
-        bunchOfContractAddress["secret"].push(ContractAddress("doctorVerificator", doctorVerificator));
+        bunchOfContractAddress["secret"].push(ContractAddress("DoctorVerificator", doctorVerificator));
 
         address doctorRelation = address(new DoctorRelation(msg.sender));
-        bunchOfContractAddress["secret"].push(ContractAddress("doctorRelation", doctorRelation));
+        bunchOfContractAddress["secret"].push(ContractAddress("DoctorRelation", doctorRelation));
 
     }
 
@@ -250,9 +250,10 @@ contract PatientVerificator {
     }
 
     function addPatient(address _address) public {
-        require(!patient[_address]);      
-        patient[_address] = true;
-        patients.push(_address);        
+        if (!patient[_address]) {
+            patient[_address] = true;
+            patients.push(_address); 
+        }
     }
 
     function verify(address _address) public view returns(bool _bool) {

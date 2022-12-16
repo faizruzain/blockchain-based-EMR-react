@@ -3,14 +3,15 @@ import DoctorRelation from "./build/DoctorRelation.json";
 
 const doctorRelatioInstance = new web3.eth.Contract(
   DoctorRelation.abi,
-  "0x2165f7DDa17F5D13dd141F2448EeED221195494B"
+  "0xF56575cF40B14ED144A17606F65783250e1e5dD4"
 );
 
 export default doctorRelatioInstance;
 
-// ContractDeployer 0x3D79cdF5f8A570F442b11D4b938f010b8bc1A63D
-
-// electronicMedicalRecords: '0x61DCfaba7B0867F2eaE494bE2Db62Afe53425eec',
-// patientVerificator: '0x6162d5f8FDE9CCf50D944467D940E5b242cD1bCd',
-// doctorVerificator: '0x0f19Efa838A00f739E50878fF616559fd4ecBbee',
-// doctorRelation: '0x2165f7DDa17F5D13dd141F2448EeED221195494B'
+// ContractDeployer Address @ 0x236209b0F16f1C6156D2d12Ff2Ea444c61da9680
+// {
+//   MedicalRecords: '0x209A2ef01305B317A5130234Df8F8c3834B43DA7',
+//   PatientVerificator: '0x6871CB59279dABb1812FD2Bf03d391A66af8A1a2',
+//   DoctorVerificator: '0x48eAB36362d227d07B702d0272033ee00AA93318',
+//   DoctorRelation: '0xF56575cF40B14ED144A17606F65783250e1e5dD4'
+// }
