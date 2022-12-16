@@ -4,16 +4,18 @@ import Content from "./content.component";
 import doctorImage from "../assets/doctor.jpg";
 
 class MyMenu extends Component {
-  constructor() {
-    super();
+  state = {
+    activeItem: "",
+  };
 
-    this.state = {
-      activeItem: "bio",
-    };
+  componentDidMount() {
+    const lastActiveItem = localStorage.getItem("lastActiveItem");
+    this.setState({ activeItem: lastActiveItem });
   }
 
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name });
+    localStorage.setItem("lastActiveItem", name);
   };
 
   render() {
@@ -22,8 +24,8 @@ class MyMenu extends Component {
     return (
       <Grid>
         <Grid.Column width={3}>
-          <Menu size="large" compact vertical style={{marginBottom: "370px"}}>
-            <Menu.Item >
+          <Menu size="large" compact vertical style={{ marginBottom: "370px" }}>
+            <Menu.Item>
               <Image
                 src={doctorImage}
                 size="medium"
