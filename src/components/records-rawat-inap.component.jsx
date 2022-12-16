@@ -4,6 +4,7 @@ import { Container, Table } from "semantic-ui-react";
 class RecordsRawatInap extends Component {
   render() {
     const { patientDetails, records } = this.props;
+
     return (
       <Container>
         <Table celled striped>
@@ -104,7 +105,7 @@ class RecordsRawatInap extends Component {
 
                 <Table.Row>
                   <Table.Cell collapsing>
-                    <h5>Pengobatan</h5>
+                    <h5>Pengobatan dan Tindakan</h5>
                   </Table.Cell>
                   <Table.Cell>
                     <p>{record["7"]}</p>
@@ -113,19 +114,10 @@ class RecordsRawatInap extends Component {
 
                 <Table.Row>
                   <Table.Cell collapsing>
-                    <h5>Tindakan</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["8"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
                     <h5>Hasil Observasi</h5>
                   </Table.Cell>
                   <Table.Cell>
-                    <p>{record["10"]}</p>
+                    <p>{record["9"]}</p>
                   </Table.Cell>
                 </Table.Row>
 
@@ -134,7 +126,7 @@ class RecordsRawatInap extends Component {
                     <h5>Ringkasan Pulang</h5>
                   </Table.Cell>
                   <Table.Cell>
-                    <p>{record["11"]}</p>
+                    <p>{record["10"]}</p>
                   </Table.Cell>
                 </Table.Row>
 
@@ -143,7 +135,7 @@ class RecordsRawatInap extends Component {
                     <h5>Dokter</h5>
                   </Table.Cell>
                   <Table.Cell>
-                    <p>{record["12"]}</p>
+                    <p>{record["11"]}</p>
                   </Table.Cell>
                 </Table.Row>
 
@@ -152,7 +144,7 @@ class RecordsRawatInap extends Component {
                     <h5>Pelayanan</h5>
                   </Table.Cell>
                   <Table.Cell>
-                    <p>{record["13"]}</p>
+                    <p>{record["12"]}</p>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>

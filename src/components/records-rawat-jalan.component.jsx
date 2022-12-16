@@ -4,6 +4,7 @@ import { Container, Table } from "semantic-ui-react";
 class RecordsRawatJalan extends Component {
   render() {
     const { patientDetails, records } = this.props;
+
     return (
       <Container>
         <Table celled striped>
@@ -77,7 +78,7 @@ class RecordsRawatJalan extends Component {
 
                 <Table.Row>
                   <Table.Cell collapsing>
-                    <h5>Diagnosis</h5>
+                    <h5>Fisik</h5>
                   </Table.Cell>
                   <Table.Cell>
                     <p>{record["4"]}</p>
@@ -86,7 +87,7 @@ class RecordsRawatJalan extends Component {
 
                 <Table.Row>
                   <Table.Cell collapsing>
-                    <h5>Rencana Penatalaksanaan</h5>
+                    <h5>Diagnosis</h5>
                   </Table.Cell>
                   <Table.Cell>
                     <p>{record["5"]}</p>
@@ -95,7 +96,7 @@ class RecordsRawatJalan extends Component {
 
                 <Table.Row>
                   <Table.Cell collapsing>
-                    <h5>Pengobatan</h5>
+                    <h5>Rencana Penatalaksanaan</h5>
                   </Table.Cell>
                   <Table.Cell>
                     <p>{record["6"]}</p>
@@ -104,7 +105,7 @@ class RecordsRawatJalan extends Component {
 
                 <Table.Row>
                   <Table.Cell collapsing>
-                    <h5>Tindakan</h5>
+                    <h5>Pengobatan dan Tindakan</h5>
                   </Table.Cell>
                   <Table.Cell>
                     <p>{record["7"]}</p>
