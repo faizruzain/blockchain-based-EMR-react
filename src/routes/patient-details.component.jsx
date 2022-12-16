@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Container, Table, Card, Icon, Image, Grid } from "semantic-ui-react";
+import RecordsRawatJalan from "../components/records-rawat-jalan.component";
+import RecordsRawatInap from "../components/records-rawat-inap.component";
+import RecordsGawatDarurat from "../components/records-gawat-darurat.component";
 import medicalRecordsinstance from "../ethereum/instance-medical-records";
 import web3 from "../ethereum/web3";
 
@@ -8,18 +10,26 @@ class PatientDetails extends Component {
     super();
     this.state = {
       address: "",
+      jenis: "",
       rawatJalan: {
         patientDetails: {},
         records: [],
       },
-      rawatInap: {},
-      gawatDarurat: {},
+      rawatInap: {
+        patientDetails: {},
+        records: [],
+      },
+      gawatDarurat: {
+        pengantar: {},
+        records: [],
+      },
     };
   }
 
   async componentDidMount() {
     const [, , , jenis, params] = window.location.pathname.split("/");
-    this.setState({ address: params });
+
+    this.setState({ address: params, jenis: jenis });
 
     const accounts = await web3.eth.getAccounts();
 
@@ -30,17 +40,15 @@ class PatientDetails extends Component {
           from: accounts[0],
         });
 
+      const { a, b } = data;
+
       const { patientDetails, records } = this.state.rawatJalan;
 
-      patientDetails.patientAddress = data[0]["patientAddress"];
-      patientDetails.nama_lengkap = data[0]["nama_lengkap"];
-      patientDetails.umur = data[0]["umur"];
-      patientDetails.tanggal_lahir = data[0]["tanggal_lahir"];
-      patientDetails.gender = data[0]["gender"];
-
-      this.setState({ patientDetails });
-
-      const { a, b } = data;
+      patientDetails.patientAddress = a["patientAddress"];
+      patientDetails.nama_lengkap = a["nama_lengkap"];
+      patientDetails.umur = a["umur"];
+      patientDetails.tanggal_lahir = a["tanggal_lahir"];
+      patientDetails.gender = a["gender"];
 
       for (const key in b) {
         const obj = {};
@@ -49,6 +57,8 @@ class PatientDetails extends Component {
         }
         records.push(obj);
       }
+
+      this.setState({ patientDetails, records });
     } else if (jenis === "Rawat-Inap") {
       const data = await medicalRecordsinstance.methods
         .getInPatient(params)
@@ -56,7 +66,25 @@ class PatientDetails extends Component {
           from: accounts[0],
         });
 
-      console.log(data);
+      const { a, b } = data;
+
+      const { patientDetails, records } = this.state.rawatInap;
+
+      patientDetails.patientAddress = a["patientAddress"];
+      patientDetails.nama_lengkap = a["nama_lengkap"];
+      patientDetails.umur = a["umur"];
+      patientDetails.tanggal_lahir = a["tanggal_lahir"];
+      patientDetails.gender = a["gender"];
+
+      for (const key in b) {
+        const obj = {};
+        for (let i = 0; i < b[key].length; i++) {
+          obj[i] = b[key][i];
+        }
+        records.push(obj);
+      }
+
+      this.setState({ patientDetails, records });
     } else if (jenis === "Gawat-Darurat") {
       const data = await medicalRecordsinstance.methods
         .getEmergencyPatient(params)
@@ -64,125 +92,61 @@ class PatientDetails extends Component {
           from: accounts[0],
         });
 
-      console.log(data);
+      const { a, b } = data;
+
+      const { pengantar, records } = this.state.gawatDarurat;
+
+      pengantar.add = a["add"];
+      pengantar.pengantar_pasien = a["pengantar_pasien"];
+      pengantar.umur = a["umur"];
+      pengantar.nama_lengkap = a["nama_lengkap"];
+      pengantar.hp = a["hp"];
+      pengantar.hubungan = a["hubungan"];
+
+      for (const key in b) {
+        const obj = {};
+        for (let i = 0; i < b[key].length; i++) {
+          obj[i] = b[key][i];
+        }
+        records.push(obj);
+      }
+
+      this.setState({ pengantar, records });
     }
   }
 
   render() {
-    const { patientDetails, records } = this.state.rawatJalan;
-    return (
-      <Container>
-        <Container>
-          <Grid container columns="equal">
-            <Grid.Row>
-              <Grid.Column>
-                <Image
-                  circular
-                  src="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
-                  size="small"
-                  floated="right"
-                />
-              </Grid.Column>
+    const { jenis } = this.state;
+    const rj_patientDetails = this.state.rawatJalan.patientDetails;
+    const rj_records = this.state.rawatJalan.records;
+    const ri_patientDetails = this.state.rawatInap.patientDetails;
+    const ri_records = this.state.rawatInap.records;
+    const gd_pengantar = this.state.gawatDarurat.pengantar;
+    const gd_records = this.state.gawatDarurat.records;
 
-              <Grid.Column>
-                <h3>{patientDetails.nama_lengkap}</h3>
-                <h4>{patientDetails.umur} Tahun</h4>
-                <h4>{patientDetails.tanggal_lahir}</h4>
-                <h4>{patientDetails.gender}</h4>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+    const renderRecords = () => {
+      if (jenis === "Rawat-Jalan") {
+        return (
+          <RecordsRawatJalan
+            patientDetails={rj_patientDetails}
+            records={rj_records}
+          />
+        );
+      } else if (jenis === "Rawat-Inap") {
+        return (
+          <RecordsRawatInap
+            patientDetails={ri_patientDetails}
+            records={ri_records}
+          />
+        );
+      } else if (jenis === "Gawat-Darurat") {
+        return (
+          <RecordsGawatDarurat pengantar={gd_pengantar} records={gd_records} />
+        );
+      }
+    };
 
-        {records.map((record, index) => {
-          return (
-            <Table key={index} celled striped>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell colSpan="3">
-                    {patientDetails.patientAddress}
-                  </Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Jenis Pasien</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["1"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Tanggal Masuk</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["2"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Anamnesis</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["3"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Diagnosis</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["4"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Rencana Penatalaksanaan</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["5"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Pengobatan</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["6"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Tindakan</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["7"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-
-                <Table.Row>
-                  <Table.Cell collapsing>
-                    <h5>Pelayanan</h5>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>{record["8"]}</p>
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-          );
-        })}
-      </Container>
-    );
+    return renderRecords();
   }
 }
 
