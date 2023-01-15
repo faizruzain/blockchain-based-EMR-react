@@ -1,17 +1,21 @@
 import { Component } from "react";
-import { Container, Table } from "semantic-ui-react";
+import { Container, Table, Button } from "semantic-ui-react";
 import axios from "axios";
 
+const address = window.ethereum.selectedAddress;
+
 class PatientDataDetails extends Component {
-  state = { patientDetails: "" };
+  state = { patientDetails: "", contenteditable: "false" };
 
   componentDidMount() {
     const id = window.location.href.split("/");
+    console.log(address);
     axios
-      .get(`http://localhost:5000/get/patient/records?id=${id[5]}`)
+      .get(
+        `http://localhost:5000/get/patient/records?id=${id[5]}&address=${address}`
+      )
       .then((res) => {
         const data = res.data.data;
-        console.log(res.data.data);
         this.setState({ patientDetails: data });
       })
       .catch((err) => {
@@ -22,14 +26,44 @@ class PatientDataDetails extends Component {
       });
   }
 
+  editable = (e) => {
+    console.log(e);
+    this.setState({ contenteditable: "true" });
+  };
+
   render() {
-    const { patientDetails } = this.state;
+    const { patientDetails, contenteditable } = this.state;
+    console.log(contenteditable);
     return (
       <Container>
-        <Table celled striped>
+        <Table
+          contenteditable={contenteditable}
+          style={{ marginBottom: "20px" }}
+          celled
+          striped
+        >
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell colSpan="3">Patient Records</Table.HeaderCell>
+              <Table.HeaderCell colSpan="3">
+                Patient Records
+                <Button
+                  onClick={this.editable}
+                  style={{ marginBottom: "5px" }}
+                  floated="right"
+                  primary
+                >
+                  Edit Records
+                </Button>
+
+                <Button
+                  onClick={this.editable}
+                  style={{ marginBottom: "5px" }}
+                  floated="right"
+                  positive
+                >
+                  Edit Records
+                </Button>
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
