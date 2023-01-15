@@ -9,8 +9,9 @@ if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
   web3 = new Web3(window.ethereum);
 } else {
   // We are on the server *OR* the user is not running metamask
-  const provider = new Web3("http://127.0.0.1:8545"); //new Web3.providers.HttpProvider(API);
-  web3 = new Web3(provider);
+  alert("install metamask to continue")
+  // const provider = new Web3("http://127.0.0.1:8545");
+  // web3 = new Web3(provider);
 }
 
 export default web3;

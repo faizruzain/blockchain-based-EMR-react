@@ -2,20 +2,19 @@ import { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Card, Pagination } from "semantic-ui-react";
 import axios from "axios";
-
-const address = window.ethereum.selectedAddress;
+import web3 from "../ethereum/web3";
 
 class PtientsList extends Component {
   state = { lists: [], activePage: "" };
 
-  componentDidMount() {
-    console.log(address);
+  async componentDidMount() {
     const lastActiveItem = localStorage.getItem("lastActivePage");
     this.getPatientsData(lastActiveItem === null ? "1" : lastActiveItem);
     this.setState({ activePage: lastActiveItem });
   }
 
-  getPatientsData = (page) => {
+  getPatientsData = async(page) => {
+    const [address] = await web3.eth.getAccounts();
     console.log(address);
     axios
       .get(
@@ -33,7 +32,8 @@ class PtientsList extends Component {
       });
   };
 
-  nextPage = (event) => {
+  nextPage = async(event) => {
+    const [address] = await web3.eth.getAccounts();
     const page = event.target.innerText;
     console.log(address);
     axios
