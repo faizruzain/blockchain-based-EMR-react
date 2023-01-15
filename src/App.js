@@ -5,6 +5,7 @@ import Login from "./routes/login.component";
 import Header from "./components/header.component";
 import MyMenu from "./components/my-menu.component";
 import PatientDetails from "./routes/patient-details.component";
+import PatientDataDetails from "./components/render-patient-data.component";
 
 class App extends Component {
   render() {
@@ -19,6 +20,10 @@ class App extends Component {
             <Route
               path="/doctor/patient-details/:jenis/:address"
               element={<PatientDetails />}
+            />
+            <Route
+              path="/doctor/patient-details/:id"
+              element={<PatientDataDetails />}
             />
           </Route>
         </Routes>
