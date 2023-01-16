@@ -6,6 +6,7 @@ import Header from "./components/header.component";
 import MyMenu from "./components/my-menu.component";
 import PatientDetails from "./routes/patient-details.component";
 import PatientDataDetails from "./components/render-patient-data.component";
+import PatientPage from "./components/patient-page.component";
 
 class App extends Component {
   render() {
@@ -15,6 +16,11 @@ class App extends Component {
       >
         <Routes>
           <Route path="/" element={<Login />} />
+          {/* <Route path="/patient" element={<Header />} /> */}
+          <Route path="/patient" element={<Header />}>
+            <Route path="/patient" element={<PatientPage />} />
+          </Route>
+
           <Route path="/doctor" element={<Header />}>
             <Route path="/doctor" element={<MyMenu />} />
             <Route

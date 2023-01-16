@@ -1,9 +1,10 @@
 import { Component } from "react";
 import PtientsList from "./patientslist.component";
 import Bio from "./bio.component";
-import NewPatient from "./new-patient.component";
+// import NewPatient from "./new-patient.component";
 import AddNewPatient from "./add-new-patient.component";
-import PatientDataDetails from "./render-patient-data.component";
+// import PatientDataDetails from "./render-patient-data.component";
+import PatientRecords from "./patient-records.component";
 
 class Content extends Component {
   state = {
@@ -19,6 +20,8 @@ class Content extends Component {
       return <PtientsList />;
     } else if (content === "newPatient") {
       return <AddNewPatient />;
+    } else if (content === "patientRecords") {
+      return <PatientRecords/>
     }
   }
 }
