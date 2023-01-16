@@ -1,6 +1,6 @@
 import { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Card, Pagination } from "semantic-ui-react";
+import { Card, Pagination, Icon, Input } from "semantic-ui-react";
 import axios from "axios";
 import web3 from "../ethereum/web3";
 
@@ -13,7 +13,7 @@ class PtientsList extends Component {
     this.setState({ activePage: lastActiveItem });
   }
 
-  getPatientsData = async(page) => {
+  getPatientsData = async (page) => {
     const [address] = await web3.eth.getAccounts();
     console.log(address);
     axios
@@ -32,7 +32,7 @@ class PtientsList extends Component {
       });
   };
 
-  nextPage = async(event) => {
+  nextPage = async (event) => {
     const [address] = await web3.eth.getAccounts();
     const page = event.target.innerText;
     console.log(address);
@@ -55,11 +55,41 @@ class PtientsList extends Component {
     localStorage.setItem("lastActivePage", page);
   };
 
+  // find = async (e) => {
+  //   console.log(e.target.value);
+  //   const [address] = await web3.eth.getAccounts();
+  //   const id = e.target.value;
+  //   const url = `http://localhost:5000/get/patient/records?id=${id}&address=${address}`;
+  //   axios
+  //     .get(
+  //       url
+  //       // `http://localhost:5000/get/patient/records?id=63c3845b2261f918cc71eadf&address=0x71f07EE63b0B2db5a6F9ACC253E8D8Ff8653E17A`
+  //     )
+  //     .then((res) => {
+  //       const data = res.data.data;
+  //       console.log([data]);
+  //       this.setState({ lists: data });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       console.log("completed");
+  //     });
+  // };
+
   render() {
     const { lists, activePage } = this.state;
 
     return (
       <Fragment>
+        {/* <Input
+          icon={<Icon name="search" inverted circular link />}
+          placeholder="Search..."
+          fluid="true"
+          style={{ marginBottom: "20px" }}
+          onChange={this.find}
+        /> */}
         <Card.Group stackable itemsPerRow={2}>
           {lists.map((list, index) => {
             return (
@@ -83,10 +113,11 @@ class PtientsList extends Component {
               marginLeft: "auto",
               marginBottom: "20px",
             }}
-            totalPages={250}
+            totalPages={500}
             onPageChange={this.nextPage}
             activePage={activePage}
           />
+
         </Card.Group>
       </Fragment>
     );

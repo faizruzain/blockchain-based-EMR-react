@@ -18,7 +18,7 @@ class Header extends Component {
           </Menu.Item>
 
           <Menu.Menu position="right">
-            <Menu.Item
+            {/* <Menu.Item
               name="features"
               active={activeItem === "features"}
               onClick={this.handleItemClick}
@@ -31,14 +31,14 @@ class Header extends Component {
               onClick={this.handleItemClick}
             >
               Testimonials
-            </Menu.Item>
+            </Menu.Item> */}
 
             <Menu.Item
-              name="sign-in"
-              active={activeItem === "sign-in"}
+              name="log-out"
+              active={activeItem === "log-out"}
               onClick={this.handleItemClick}
             >
-              Sign-in
+              Log-Out
             </Menu.Item>
           </Menu.Menu>
         </Menu>

@@ -58,13 +58,13 @@ class MyMenu extends Component {
               New Patient
             </Menu.Item>
 
-            <Menu.Item
+            {/* <Menu.Item
               name="logout"
               active={activeItem === "logout"}
               onClick={this.handleItemClick}
             >
               LogOut
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
         </Grid.Column>
 

@@ -2,6 +2,8 @@ import { Component } from "react";
 import PtientsList from "./patientslist.component";
 import Bio from "./bio.component";
 import NewPatient from "./new-patient.component";
+import AddNewPatient from "./add-new-patient.component";
+import PatientDataDetails from "./render-patient-data.component";
 
 class Content extends Component {
   state = {
@@ -16,7 +18,7 @@ class Content extends Component {
     } else if (content === "myPatients") {
       return <PtientsList />;
     } else if (content === "newPatient") {
-      return <NewPatient />;
+      return <AddNewPatient />;
     }
   }
 }
