@@ -18,7 +18,7 @@ class PtientsList extends Component {
     console.log(address);
     axios
       .get(
-        `http://localhost:5000/get/patient/records?page=${page}&address=${address}`
+        `https://skripsi-backend-service.onrender.com/get/patient/records?page=${page}&address=${address}`
       )
       .then((res) => {
         const data = res.data.data;
@@ -38,7 +38,7 @@ class PtientsList extends Component {
     console.log(address);
     axios
       .get(
-        `http://localhost:5000/get/patient/records?page=${page}&address=${address}`
+        `https://skripsi-backend-service.onrender.com/get/patient/records?page=${page}&address=${address}`
       )
       .then((res) => {
         const data = res.data.data;

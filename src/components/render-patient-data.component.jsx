@@ -17,7 +17,7 @@ class PatientDataDetails extends Component {
     const [address] = await web3.eth.getAccounts();
     console.log(address);
     const id = window.location.href.split("/");
-    const url = `http://localhost:5000/get/patient/records?id=${id[5]}&address=${address}`;
+    const url = `https://skripsi-backend-service.onrender.com/get/patient/records?id=${id[5]}&address=${address}`;
     axios
       .get(
         url
@@ -68,7 +68,7 @@ class PatientDataDetails extends Component {
     console.log(data);
 
     axios
-      .put(`http://localhost:5000/get/patient/records`, data)
+      .put(`https://skripsi-backend-service.onrender.com/get/patient/records`, data)
       .then((res) => {
         const { newDoc } = res.data;
         const { transactionHash } = res.data;

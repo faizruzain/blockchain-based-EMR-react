@@ -48,7 +48,7 @@ class Login extends Component {
     const verify = async () => {
       const { address } = this.state;
       axios
-        .get(`http://localhost:5000/verify?address=${address}`)
+        .get(`https://skripsi-backend-service.onrender.com/verify?address=${address}`)
         .then((res) => {
           console.log(res.data);
           const { role } = res.data;

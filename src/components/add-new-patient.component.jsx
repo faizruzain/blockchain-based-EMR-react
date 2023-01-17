@@ -11,11 +11,11 @@ class AddNewPatient extends Component {
     transactionHash: "",
   };
 
-  async componentDidMount() {
-    const [address] = await web3.eth.getAccounts();
-    console.log(address);
-    const id = window.location.href.split("/");
-    const url = `http://localhost:5000/get/patient/records?id=${id[5]}&address=${address}`;
+  // async componentDidMount() {
+  //   const [address] = await web3.eth.getAccounts();
+  //   console.log(address);
+    // const id = window.location.href.split("/");
+    // const url = `http://localhost:5000/get/patient/records?id=${id[5]}&address=${address}`;
     // axios
     //   .get(
     //     url
@@ -31,7 +31,7 @@ class AddNewPatient extends Component {
     //   .finally(() => {
     //     console.log("completed");
     //   });
-  }
+  // }
 
   editable = () => {
     this.setState({ contenteditable: "true", disabled: false });
@@ -66,7 +66,7 @@ class AddNewPatient extends Component {
     console.log(data);
 
     axios
-      .post(`http://localhost:5000/add-new-record`, data)
+      .post(`https://skripsi-backend-service.onrender.com/add-new-record`, data)
       .then((res) => {
         const { newDoc } = res.data;
         const { transactionHash } = res.data;

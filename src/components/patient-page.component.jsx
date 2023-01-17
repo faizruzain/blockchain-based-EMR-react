@@ -29,7 +29,7 @@ class PatientPage extends Component {
     const [address] = await web3.eth.getAccounts();
     this.setState({ address: address });
     // const [address] = await web3.eth.getAccounts();
-    const url = `http://localhost:5000/get/patient/records?id=63c54e22a4a8cf503522d0e3&address=${address}`;
+    const url = `https://skripsi-backend-service.onrender.com/get/patient/records?id=63c54e22a4a8cf503522d0e3&address=${address}`;
     axios
       .get(
         url
