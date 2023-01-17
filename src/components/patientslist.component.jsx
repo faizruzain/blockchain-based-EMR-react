@@ -113,7 +113,7 @@ class PtientsList extends Component {
               marginLeft: "auto",
               marginBottom: "20px",
             }}
-            totalPages={500}
+            totalPages={505}
             onPageChange={this.nextPage}
             activePage={activePage}
           />

@@ -2,11 +2,6 @@ import { Component } from "react";
 import {
   Container,
   Table,
-  Button,
-  Menu,
-  Grid,
-  Image,
-  Segment,
 } from "semantic-ui-react";
 import axios from "axios";
 import web3 from "../ethereum/web3";
@@ -22,8 +17,7 @@ class PatientRecords extends Component {
   async componentDidMount() {
     const [address] = await web3.eth.getAccounts();
     console.log(address);
-    // const id = window.location.href.split("/");
-    const url = `http://localhost:5000/get/patient/records?id=63c3845b2261f918cc71eaf1&address=${address}`;
+    const url = `http://localhost:5000/get/patient/records?id=63c54e22a4a8cf503522d0e3&address=${address}`;
     axios
       .get(
         url
@@ -31,6 +25,7 @@ class PatientRecords extends Component {
       )
       .then((res) => {
         const data = res.data.data;
+        console.log(data);
         this.setState({ patientDetails: data });
       })
       .catch((err) => {
@@ -42,7 +37,7 @@ class PatientRecords extends Component {
   }
 
   render() {
-    const { patientDetails, contenteditable, disabled } = this.state;
+    const { patientDetails, contenteditable } = this.state;
 
     return (
       <Container>

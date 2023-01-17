@@ -14,15 +14,18 @@ class Content extends Component {
   render() {
     const { content } = this.props;
 
-    if (content === "bio") {
+    if (content === "patientRecords") {
+      return <PatientRecords />;
+    } else if (content === "bio") {
       return <Bio />;
     } else if (content === "myPatients") {
       return <PtientsList />;
     } else if (content === "newPatient") {
       return <AddNewPatient />;
-    } else if (content === "patientRecords") {
-      return <PatientRecords/>
-    }
+    } 
+    // else if (content === "patientRecords") {
+    //   return <PatientRecords />;
+    // }
   }
 }
 

@@ -19,31 +19,53 @@ class Login extends Component {
     this.setState({ address: address });
   }
 
-  verify = async () => {
-    const { address } = this.state;
-    axios
-      .get(`http://localhost:5000/verify?address=${address}`)
-      .then((res) => {
-        console.log(res.data);
-        const { role } = res.data;
-        this.setState({ role: role });
-        if (role === "doctor") {
-          return redirect("http://localhost:3000/doctor/");
-        } else if (role === "patient") {
-          return redirect("http://localhost:3000/patient/");
-        } else if (role === "unknown") {
-          this.setState({ role: role });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // verify = async () => {
+  //   const { address } = this.state;
+  //   axios
+  //     .get(`http://localhost:5000/verify?address=${address}`)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       const { role } = res.data;
+  //       this.setState({ role: role });
+  //       if (role === "doctor") {
+  //         return redirect("http://localhost:3000/doctor/");
+  //       } else if (role === "patient") {
+  //         return redirect("http://localhost:3000/patient/");
+  //       } else if (role === "unknown") {
+  //         this.setState({ role: role });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   render() {
     window.ethereum.on("accountsChanged", function (accounts) {
       window.location.reload();
     });
+
+    const verify = async () => {
+      const { address } = this.state;
+      axios
+        .get(`http://localhost:5000/verify?address=${address}`)
+        .then((res) => {
+          console.log(res.data);
+          const { role } = res.data;
+          this.setState({ role: role });
+          if (role === "doctor") {
+            window.location.replace("http://localhost:3000/doctor/")
+            // return redirect("http://localhost:3000/doctor/");
+          } else if (role === "patient") {
+            window.location.replace("http://localhost:3000/patient/")
+          } else if (role === "unknown") {
+            this.setState({ role: role });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     const { address } = this.state;
     return (
@@ -53,14 +75,14 @@ class Login extends Component {
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 500 }}>
-          <Header as="h2" color="teal" textAlign="center">
+          <Header as="h2" color="twitter" textAlign="center">
             Verify your address
           </Header>
           <Form size="large">
             <Segment stacked>
               <h3>{address}</h3>
 
-              <Button onClick={this.verify} color="teal" fluid size="large">
+              <Button onClick={verify} color="twitter" fluid size="large">
                 Verify
               </Button>
             </Segment>
