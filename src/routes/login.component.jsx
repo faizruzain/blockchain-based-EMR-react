@@ -54,10 +54,10 @@ class Login extends Component {
           const { role } = res.data;
           this.setState({ role: role });
           if (role === "doctor") {
-            window.location.replace("http://localhost:3000/doctor/")
+            window.location.replace("https://blockchain-based-emr-react.vercel.app/doctor/")
             // return redirect("http://localhost:3000/doctor/");
           } else if (role === "patient") {
-            window.location.replace("http://localhost:3000/patient/")
+            window.location.replace("https://blockchain-based-emr-react.vercel.app/patient/")
           } else if (role === "unknown") {
             this.setState({ role: role });
           }
